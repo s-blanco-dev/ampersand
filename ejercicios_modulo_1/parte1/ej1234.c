@@ -22,7 +22,7 @@ typedef struct Equation {
 
 void solve(Equation* eq, Result* result);
 
-int bin_to_dec(char* binum); 
+// int bin_to_dec(char* binum); 
 
 void type_size() {
   printf("char: %d\n", sizeof(char));
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
   solve(eq, res);
   printf("R1:\n Re(z) = %f \n Im(z) = %f\n", res->r1.Re, res->r1.Im);  
   printf("R2:\n Re(z) = %f \n Im(z) = %f\n", res->r2.Re, res->r2.Im);  
-  printf("Binario: %s\nDecimal: %d\n", ni, bin_to_dec(ni));
+  // printf("Binario: %s\nDecimal: %d\n", ni, bin_to_dec(ni));
 
   // no quiero fugas
   free(eq);
@@ -112,19 +112,19 @@ void solve(Equation* eq, Result* result) {
 }
 
 /* ----------------------------------- */
-
-int bin_to_dec(char* binum) {
-  int binum_size = strlen(binum);
-  int dec_num = 0;
-
-  int curr_pot = 0;
-  for (int i = binum_size-1; i >= 0; i--) {
-    curr_pot = pow(2, i);
-    if (binum[i] == '1') {
-      dec_num += curr_pot;
-    }
-  }
-  return dec_num;
-}
-
-
+//
+// int bin_to_dec(char* binum) {
+//   int binum_size = strlen(binum);
+//   int dec_num = 0;
+//
+//   int curr_pot = 0;
+//   for (int i = binum_size-1; i >= 0; i--) {
+//     curr_pot = pow(2, i);
+//     if (binum[i] == '1') {
+//       dec_num += curr_pot;
+//     }
+//   }
+//   return dec_num;
+// }
+//
+//
