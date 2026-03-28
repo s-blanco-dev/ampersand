@@ -15,16 +15,16 @@ typedef struct coeff_s {
 } coeff_t;
 
 typedef struct root_s {
-  int32_t real1;
-  int32_t imag1;
-  int32_t real2;
-  int32_t imag2;
+  float real1;
+  float imag1;
+  float real2;
+  float imag2;
   bool complex;
 } root_t;
 
 typedef struct complex_s {
-  int32_t real;
-  int32_t imag;
+  float real;
+  float imag;
 } complex_t;
 
 typedef struct date_s {
