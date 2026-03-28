@@ -7,7 +7,19 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-/* Resuelve ecuación cuadrática admitiendo raíces complejas. */
+void init_lab() {
+  printf("AMPERSAND:\nSantiago Blanco\nFelipe Paladino\nPiero Saucedo\n");
+}
+
+/*
+ * @brief Resuelve una ecuación cuadrática de coeficientes enteros 
+ * permitiendo raíces complejas
+ *
+ * El lector ya está familiarizado con la resolución de ecuaciones cuadráticas.
+ *
+ * @param coeficientes      Puntero a estructura de coeficientes enteros a,b,c.
+ * * @return root_t*      Devuelve puntero a estructura de raíces (partes reales e imag).
+ */
 root_t* eq_solver(coeff_t *coeficientes) {
   if (coeficientes == NULL) {
     return NULL;
@@ -62,7 +74,19 @@ root_t* eq_solver(coeff_t *coeficientes) {
   return NULL;
 }
 
-/* Co-autores: Gilbert Strang, José Job Flores */
+/* 
+ * @brief Efectúa la resta de dos matrices A y B, ambas de dimensión mxn.
+ *
+ * Verifica que ambas matrices sean de la misma dimensión, reserva memoria
+ * dinámica para la struct de la matriz resultante y sus datos. Luego itera
+ * sobre cada coeficiente efectuando la resta entre ambos. Operación de 
+ * complejidad temporal cuadrática -> O(n^2).
+ *
+ * @param A   matriz_t que se pasa por valor, se le restará B
+ * @param B   matriz_t que se pasa por valor, será restada a A
+ * * @return matriz_t*  Puntero a estructura de matriz resultado de la resta.
+ * * NULL si no se pudo completar la operación.
+ * */
 matriz_t* matrix_sub(matriz_t A, matriz_t B){
   /* La suma de matrices para dos matrices A y B de mxn resulta en una matriz
    * C de mxn donde cada entrada c_ij = a_ij + b_ij
@@ -70,7 +94,6 @@ matriz_t* matrix_sub(matriz_t A, matriz_t B){
 
   if (A.rows != B.rows || A.cols != B.cols) {
     // NO SE PUEDEN SUMAR DOS MATRICES DE DIMENSIONES DISTINTAS
-    // el usuario es un nabo
     return NULL;
   }
 
@@ -84,6 +107,9 @@ matriz_t* matrix_sub(matriz_t A, matriz_t B){
 
   // pido espacio para las entradas de la matriz
   C->data = malloc(C->rows * sizeof(int16_t*));
+  for (int i = 0; i < C->rows; i++) {
+    C->data[i] = malloc(C->cols * sizeof(int16_t)); 
+  }
   if (C->data == NULL) {
     return NULL;
   }
@@ -99,8 +125,18 @@ matriz_t* matrix_sub(matriz_t A, matriz_t B){
 }
 
 
+/*
+ * @brief efectúa la suma de dos números complejos
+ *
+ * Asigna memoria para el complejo resultante, suma parte real e imaginaria de a y b
+ *
+ * @param a struct complex_t que se pasa por valor
+ * @param b idem
+ * * @return complex_t*, un número complejo con dos atributos para la parte real e imaginaria 
+ * * NULL si hay un error asignando memoria
+ * */
 complex_t* sum(complex_t a, complex_t b){
-  complex_t *result = malloc(sizeof(complex_t*));
+  complex_t *result = malloc(sizeof(complex_t));
   if (result == NULL) {
     return NULL;
   }
@@ -111,8 +147,19 @@ complex_t* sum(complex_t a, complex_t b){
   return result;
 }
 
+/*
+ * @brief efectúa el producto de dos números complejos
+ *
+ * Asigna memoria para el complejo resultante, básicamente realiza una operación
+ * distributiva teniendo en cuenta que i^2 = -1
+ *
+ * @param a struct complex_t que se pasa por valor
+ * @param b idem
+ * * @return complex_t*, un puntero a número complejo con dos atributos para la 
+ * * parte real e imaginaria. NULL si hay un error asignando memoria
+ * */
 complex_t* prod(complex_t a, complex_t b){
-  complex_t *result = malloc(sizeof(complex_t*));
+  complex_t *result = malloc(sizeof(complex_t));
   if (result == NULL) {
     return NULL;
   }
@@ -123,6 +170,18 @@ complex_t* prod(complex_t a, complex_t b){
   return result;
 }
 
+/*
+ * @brief imprime el array en orden inverso usando un puntero genérico
+ *
+ * Recorre un array genérico desde el último al primer elemento imprimiendo
+ * su contenido en hexadecimal. Como es de tipo void*, necesita el tamaño 
+ * de cada elemento para poder iterar correctamente.
+ *
+ * @param array   Array genérico (puntero al inicio del array)
+ * @param data_type  tamaño del tipo de dato 
+ * @param array_size  cantidad de elementos 
+ * * @return void
+ * */
 void print_reverse_array(void* array, size_t data_type, size_t array_size){
   if (array == NULL || array_size == 0 || data_type == 0) {
     return;
@@ -130,12 +189,22 @@ void print_reverse_array(void* array, size_t data_type, size_t array_size){
 
   unsigned char* arr_ptr = (unsigned char*) array; // camina de a 1 byte ahora
 
-  for (size_t i = array_size; i >= 0; i--) {
-    void* curr = arr_ptr + ((i-1)*data_type); 
+  for (size_t i = array_size; i > 0; i--) {
+    unsigned char* curr = arr_ptr + ((i-1)*data_type); 
+    // ante la incertidumbre, imprimo lo que haya adentro en hexa 
+    // temporal
+    printf("%02X\n", *(arr_ptr + i));
+  }
+}
 
-    // chanchada, embarrada, desastre, engrasada, enchastre, salame
-    if (data_type == 4) {
-      printf("%d\n", *(int*) curr);
+/* DEFINO FUNCIONES DE IMPRESION DE TIPOS */
+/* ------------------------------------- */
+
+void print_matriz_t(matriz_t *matriz){
+  for (int i = 0; i < matriz->rows; i++) {
+    for (int j = 0; j < matriz->cols; j++) {
+      printf("%d\t", matriz->data[i][j]);
     }
+    printf("\n");
   }
 }

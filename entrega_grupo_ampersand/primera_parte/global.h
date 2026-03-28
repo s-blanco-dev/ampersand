@@ -29,6 +29,8 @@ typedef struct complex_s {
 
 typedef struct date_s {
   int8_t day;
+  int8_t month;
+  int16_t year;
 } date_t;
 
 typedef struct matriz_s {
@@ -77,5 +79,14 @@ complex_t* sum(complex_t a, complex_t b);
 complex_t* prod(complex_t a, complex_t b);
 
 int days_left(date_t start, date_t finish);
+
+/* FUNCIONES PARA IMPRIMIR TIPOS POR PANTALLA */
+/* ------------------------------------------ */
+
+void print_matriz_t(matriz_t* matriz);
+void print_coeff_t(coeff_t* coeficientes);
+void print_root_t(root_t* roots);
+void print_complex_t(complex_t* complex);
+void print_date_t(date_t* fecha);
 
 #endif // !GLOBAL_H
