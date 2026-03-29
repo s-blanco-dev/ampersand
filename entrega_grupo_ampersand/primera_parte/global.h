@@ -68,6 +68,8 @@ int32_t string_length(char *string);
 
 int string_copy(char *source, char *destination);
 
+int string_words(char *string);
+
 int find_in_string(char *haystack, char *needle);
 
 void string_to_caps(char *string);

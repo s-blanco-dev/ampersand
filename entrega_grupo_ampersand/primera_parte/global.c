@@ -313,6 +313,7 @@ int swap(void *elem1, void *elem2, size_t data_type){
     b[pp] = temp;
   }
   return 0;
+}
 
 /* DEFINO FUNCIONES DE IMPRESION DE TIPOS */
 /* ------------------------------------- */

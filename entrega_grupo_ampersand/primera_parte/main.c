@@ -46,10 +46,7 @@ int main() {
 
   free(res);
 
-  return 0;
-}
-
-char string[] = "In this lecture we will talk about embebbed systems. For instance, take a car, that could be an embbebed dedive.";
+  char string[] = "In this lecture we will talk about embebbed systems. For instance, take a car, that could be an embbebed devicee.";
 
   printf("%s\n", string);
 
@@ -95,3 +92,8 @@ char string[] = "In this lecture we will talk about embebbed systems. For instan
   swap(&a, &b, sizeof(int));
 
   printf("Elemento 1: %d -> Elemento 2: %d\n", a, b);
+
+
+  return 0;
+}
+
