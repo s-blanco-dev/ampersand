@@ -45,26 +45,27 @@ int main() {
   }
 
   free(res);
-
-  char string[] = "In this lecture we will talk about embebbed systems. For instance, take a car, that could be an embbebed devicee.";
+  
+  printf("\nString de ejemplo (Ian Harris reference):\n");
+  char string[] = "In this lecture we will talk about embebbed systems. For instance, take a car, that could be an embbebed device.";
 
   printf("%s\n", string);
 
-  printf("\n==========\n");
+  printf("\n====STRING_TO_CAPS====\n");
 
   // string_to_caps
   
   string_to_caps(string);
   printf("%s\n", string);
 
-  printf("\n==========\n");
+  printf("\n====STRING_TO_MIN====\n");
 
   // string_to_min
 
   string_to_min(string);
   printf("%s\n", string);
 
-  printf("\n==========\n");
+  printf("\n====STRING_LENGTH====\n");
 
   // string_length
 
@@ -72,7 +73,7 @@ int main() {
 
   printf("%d\n", longitud_string);
 
-  printf("\n=========\n");
+  printf("\n====STRING_WORDS====\n");
 
   // string_words
 
@@ -92,6 +93,14 @@ int main() {
   swap(&a, &b, sizeof(int));
 
   printf("Elemento 1: %d -> Elemento 2: %d\n", a, b);
+
+  // find_in_string
+  
+  printf("\n====FIND_IN_STRING====\n");
+
+  int indice = find_in_string(string, "embebbed");
+
+  printf("Indice de la palabra: %d\n", indice);
 
 
   return 0;
