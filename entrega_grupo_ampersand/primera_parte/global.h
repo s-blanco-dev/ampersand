@@ -1,5 +1,6 @@
-#include <cstddef>
-#include <cstdint>
+#include <stddef.h>
+#include <stdint.h>
+#include <stdbool.h>
 #ifndef GLOBAL_H
 
 /* DECLARACION DE TIPOS */
