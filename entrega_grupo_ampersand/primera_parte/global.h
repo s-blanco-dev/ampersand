@@ -1,7 +1,9 @@
-#include <stddef.h>
 #include <stdint.h>
+#include <stddef.h>
 #include <stdbool.h>
+
 #ifndef GLOBAL_H
+#define GLOBAL_H
 
 /* DECLARACION DE TIPOS */
 /* ------------------- */
@@ -13,20 +15,22 @@ typedef struct coeff_s {
 } coeff_t;
 
 typedef struct root_s {
-  int32_t real1;
-  int32_t imag1;
-  int32_t real2;
-  int32_t imag2;
+  float real1;
+  float imag1;
+  float real2;
+  float imag2;
   bool complex;
 } root_t;
 
 typedef struct complex_s {
-  int32_t real;
-  int32_t imag;
+  float real;
+  float imag;
 } complex_t;
 
 typedef struct date_s {
   int8_t day;
+  int8_t month;
+  int16_t year;
 } date_t;
 
 typedef struct matriz_s {
@@ -75,5 +79,14 @@ complex_t* sum(complex_t a, complex_t b);
 complex_t* prod(complex_t a, complex_t b);
 
 int days_left(date_t start, date_t finish);
+
+/* FUNCIONES PARA IMPRIMIR TIPOS POR PANTALLA */
+/* ------------------------------------------ */
+
+void print_matriz_t(matriz_t* matriz);
+void print_coeff_t(coeff_t* coeficientes);
+void print_root_t(root_t* roots);
+void print_complex_t(complex_t* complex);
+void print_date_t(date_t* fecha);
 
 #endif // !GLOBAL_H
