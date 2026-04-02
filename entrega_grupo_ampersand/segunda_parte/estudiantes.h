@@ -25,3 +25,5 @@ node_t* initialize_list();
 bool insert_student(node_t* head, estudiante_t* student);
 bool remove_student(node_t* head, uint32_t ci);
 void print_list(node_t* head);
+estudiante_t* search_student(node_t* head, bool tipo, uint32_t ci, char* nombre, char* apellido);
+void print_student(estudiante_t* student);

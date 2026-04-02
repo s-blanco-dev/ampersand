@@ -16,6 +16,8 @@ int main() {
   strcpy(e1->nombre, "Nicolás");
   strcpy(e1->apellido, "Calarco");
 
+  print_student(e1);
+
     printf("Insertando flaco CI: %d...\n", e1->ci);
     if (insert_student(lista, e1)) {
         printf("Todo joya.\n");
@@ -28,6 +30,14 @@ int main() {
     
     printf("Insertando muchacho CI: %d...\n", e2->ci);
     insert_student(lista, e2);
+
+  // busco estudiante por ci
+  estudiante_t* uuu = search_student(lista, true, 12345678, NULL, NULL);
+  print_student(uuu);
+
+  // busco estudiante por nombre y apellido
+  estudiante_t* aah = search_student(lista, false, 0, "Pedro", "Alonso");
+  print_student(aah);
 
     printf("\nContenido de la lista:\n");
     print_list(lista);

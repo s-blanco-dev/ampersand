@@ -1,7 +1,18 @@
 #include "estudiantes.h"
+#include <string.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+
+void print_student(estudiante_t* student){
+  if (student == NULL) {
+    return;
+  }
+
+  printf("%s, %s\nCI: %d\nGrado: %d\nPromedio: %f\n", student->apellido, student->nombre, student->ci, student->grado, student->promedio);
+}
 
 /*
  * @brief Inicializa una lista enlazada con un nodo choclo
@@ -74,4 +85,36 @@ void print_list(node_t *head){
   printf("NULL \n");
 }
 
+/*
+ * @brief Permite buscar estudiante por ci o nombre y apellido
+ *
+ * Itera sobre la lista hasta encontrar una coincidencia. Si el tipo de búsqueda es por ci (tipo == true), 
+ * retorono cuando esta coincide. Si es por nombre y apellido (tipo == false), entonces retorno 
+ * si hay coincidencia de ambos miembros.
+ *
+ * @param head  Puntero al primer elemento de la lista
+ * @param tipo  Define el tipo de búsqueda (true si es por ci, false si es por nombre y apellido)
+ * @param ci    CI del estudiante (se usa cuando tipo == true)
+ * @param nombre    String con nombre del estudiante (se usa cuando tipo == false)
+ * @param apellido    String con apellido del est. (se usa cuando tipo == false)
+ * */
+estudiante_t* search_student(node_t* head, bool tipo, uint32_t ci, char* nombre, char* apellido){
+  node_t* temp = head->next;
 
+  while (temp != NULL) {
+    if (tipo == true) {
+      // tipo de búsqueda por ci
+      if (temp->estudiante->ci == ci) {
+        return temp->estudiante;
+      }
+    } else {
+      // tipo de búsqueda por nombre y apellido
+      if (strcmp(temp->estudiante->nombre, nombre) == 0 && strcmp(temp->estudiante->apellido, apellido) == 0) {
+        return temp->estudiante;
+      }
+    }
+    temp = temp->next;
+  }
+
+  return NULL; // el estudiante no existe
+}
