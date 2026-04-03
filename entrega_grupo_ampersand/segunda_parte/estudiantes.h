@@ -27,3 +27,5 @@ bool remove_student(node_t* head, uint32_t ci);
 void print_list(node_t* head);
 estudiante_t* search_student(node_t* head, bool tipo, uint32_t ci, char* nombre, char* apellido);
 void print_student(estudiante_t* student);
+int compare_by_ci(estudiante_t* a, estudiante_t* b);
+int compare_by_apellido(estudiante_t* a, estudiante_t* b);

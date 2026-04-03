@@ -118,3 +118,26 @@ estudiante_t* search_student(node_t* head, bool tipo, uint32_t ci, char* nombre,
 
   return NULL; // el estudiante no existe
 }
+
+int compare_by_ci(estudiante_t* a, estudiante_t* b){
+  if (a->ci < b->ci) return -1;
+  if (a->ci > b->ci) return 1;
+  return 0;
+}
+
+int compare_by_apellido(estudiante_t* a, estudiante_t* b){
+  // Inicialmente comparo por el apellido de los pupilos:
+  int compare = strcmp(a->apellido, b->apellido);
+  if (compare != 0){
+    return compare;
+  // Si llegan a tener el mismo apellido, comparamos por sus nombres:
+  compare = strcmp(a->nombre, b->nombre);
+  if (compare != 0){
+    return compare;
+  }
+  // Si llegaran a apellidarse y llamarse igual, ejemplo: "Santiago Blanco", comparo finalmente por cedula:
+  if (a->ci < b->ci) return -1;
+  if (a->ci > b->ci) return 1;
+  }
+}
+
