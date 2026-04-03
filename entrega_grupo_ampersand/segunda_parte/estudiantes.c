@@ -141,3 +141,102 @@ int compare_by_apellido(estudiante_t* a, estudiante_t* b){
   }
 }
 
+/**
+ * @brief Reorganiza un subárbol para mantener la propiedad de heap (max-heap).
+ *
+ * Esta función asegura que el nodo en la posición `i` cumpla la propiedad de heap:
+ * el valor en `arr[i]` debe ser mayor (según el comparador) que sus hijos.
+ * Si no se cumple, intercambia el elemento con el mayor de sus hijos y continúa
+ * el proceso recursivamente.
+ *
+ * Se utiliza como parte del algoritmo Heap Sort para construir y mantener
+ * la estructura de heap.
+ *
+ * @param arr Array de punteros a estudiantes (estudiante_t*).
+ * @param n Cantidad de elementos en el heap (tamaño del array).
+ * @param i Índice del nodo que se desea "heapificar".
+ * @param cmp Puntero a función comparadora que define el criterio de orden.
+ *            Debe retornar:
+ *              > 0 si el primer elemento es mayor que el segundo,
+ *              = 0 si son iguales,
+ *              < 0 si el primero es menor.
+ *
+ * @note Esta implementación construye un max-heap.
+ * @note Complejidad temporal: O(log n).
+ */
+void heapify(estudiante_t** arr, int n, int i, int (*cmp)(estudiante_t*, estudiante_t*)){
+  
+  // inicializar el mas grande como root
+  int largest = i;
+  // hijo izquierdo (left child)
+  int left = 2 * i + 1;
+  // hijo derecho (right child)
+  int right = 2 * i + 2;
+  
+  // "if left child is larger than root: modify this":
+  if (left < n && cmp(arr[left], arr[largest]) > 0){
+    largest = left;
+  }
+  if (right < n && cmp(arr[right], arr[largest]) > 0){
+    largest = right;
+  }
+  // si el mas grande no es root:
+  if (largest != i){
+    estudiante_t* temp = arr[i];
+    arr[i] = arr[largest];
+    arr[largest] = temp;
+    
+    // heapify recursivo:
+    heapify(arr, n, largest, cmp);
+  }
+}
+
+/**
+ * @brief Ordena un array de estudiantes utilizando el algoritmo Heap Sort.
+ *
+ * Este algoritmo ordena el array en orden ascendente según el criterio definido
+ * por la función comparadora. Primero construye un max-heap a partir del array,
+ * y luego extrae iterativamente el elemento máximo (raíz del heap),
+ * colocándolo al final del array.
+ *
+ * El proceso consiste en:
+ * 1. Construir un max-heap desde el array original.
+ * 2. Intercambiar la raíz (máximo) con el último elemento.
+ * 3. Reducir el tamaño del heap y aplicar heapify nuevamente.
+ * 4. Repetir hasta ordenar todo el array.
+ *
+ * @param arr Array de punteros a estudiantes (estudiante_t*).
+ * @param n Cantidad de elementos en el array.
+ * @param cmp Puntero a función comparadora que define el criterio de orden.
+ *            Debe retornar:
+ *              > 0 si el primer elemento es mayor que el segundo,
+ *              = 0 si son iguales,
+ *              < 0 si el primero es menor.
+ *
+ * @note El orden final es ascendente según el comparador.
+ * @note Complejidad temporal:
+ *       - Mejor caso: O(n log n)
+ *       - Caso promedio: O(n log n)
+ *       - Peor caso: O(n log n)
+ * @note Complejidad espacial: O(1) adicional (in-place sobre el array).
+ */
+void heap_sort(estudiante_t** arr, int n, int (*cmp)(estudiante_t*, estudiante_t*)){
+
+  if (arr == NULL || n <= 1){
+    return;
+  }
+  // construccion del heap (heapify desde abajo):
+  for (int i = n / 2 - 1; i >= 0; i--){
+    heapify(arr, n, i, cmp);
+  }
+  // uno por uno extraemos los elementos del heap:
+  for (int i = n - -1; i > 0; i--){
+    // movemos el root actual al final:
+    estudiante_t* temp = arr[0];
+    arr[0] = arr[i];
+    arr[i] = temp;
+
+    heapify(arr, i, 0, cmp);
+  }
+}
+
