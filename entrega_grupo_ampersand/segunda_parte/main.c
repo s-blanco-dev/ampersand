@@ -18,18 +18,32 @@ int main() {
 
   print_student(e1);
 
-    printf("Insertando flaco CI: %d...\n", e1->ci);
-    if (insert_student(lista, e1)) {
-        printf("Todo joya.\n");
-    }
+  printf("Insertando flaco CI: %d...\n", e1->ci);
+  if (insert_student(lista, e1)) {
+      printf("Todo joya.\n");
+  }
 
-    estudiante_t* e2 = malloc(sizeof(estudiante_t));
-    e2->ci = 87654321;
-    strcpy(e2->nombre, "Pedro");
-    strcpy(e2->apellido, "Alonso");
+  estudiante_t* e2 = malloc(sizeof(estudiante_t));
+  e2->ci = 87654321;
+  e2->grado = 2;
+  e2->promedio = 7.8;
+  strcpy(e2->nombre, "Pedro");
+  strcpy(e2->apellido, "Alonso");
     
-    printf("Insertando muchacho CI: %d...\n", e2->ci);
-    insert_student(lista, e2);
+  printf("Insertando muchacho CI: %d...\n", e2->ci);
+  insert_student(lista, e2);
+
+  
+  estudiante_t* e3 = malloc(sizeof(estudiante_t));
+  e3->ci = 3456789;
+  e3->grado = 3;
+  e3->promedio = 9.1;
+  strcpy(e3->nombre, "Alfredo");
+  strcpy(e3->apellido, "Arnaud");
+
+  printf("Insertando pupilo CI: %d...\n", e3->ci);
+  insert_student(lista, e3);
+
 
   // busco estudiante por ci
   estudiante_t* uuu = search_student(lista, true, 12345678, NULL, NULL);
