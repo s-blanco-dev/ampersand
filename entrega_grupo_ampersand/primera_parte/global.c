@@ -1,5 +1,6 @@
 /* IMPLEMENTEN LAS FUNCIONES ACÁ */
 #include "global.h"
+#include <cstdlib>
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
@@ -318,11 +319,128 @@ int swap(void *elem1, void *elem2, size_t data_type){
 /* DEFINO FUNCIONES DE IMPRESION DE TIPOS */
 /* ------------------------------------- */
 
+/* 
+ * @brief Imprime una matriz dada
+ *
+ * Imprime los coeficientes de una matriz A = (a_ij) de 
+ * dimensiones mxn en la forma a_i1, a_i2,..., ai_n
+ * para todo i desde 1 hasta m.
+ *
+ * @param matriz  Puntero a la matriz a imprimir
+ * * @return void
+ * */
 void print_matriz_t(matriz_t *matriz){
+  if (matriz == NULL) {
+    return;
+  }
   for (int i = 0; i < matriz->rows; i++) {
     for (int j = 0; j < matriz->cols; j++) {
       printf("%d\t", matriz->data[i][j]);
     }
     printf("\n");
   }
+}
+
+/*
+ * @brief Imprime una agrupación de coeficientes
+ *
+ * Nada que agregar
+ *
+ * @param coeficientes  puntero a la agrupación de coeficientes
+ * * @return void
+ * */
+void print_coeff_t(coeff_t *coeficientes){
+  if (coeficientes == NULL) {
+    return;
+  }
+
+  printf("Coeficientes:\na: %d\nb: %d\nc: %d\n", coeficientes->a, coeficientes->b, coeficientes->c);
+} 
+
+/* 
+ * @brief Imprime un número complejo en su forma binomial
+ *
+ * Lo único que podría requerir explicación es el uso del operador
+ * ternario para imprimir '-' o '+' en base al signo de la parte imaginaria. 
+ *
+ * @param complex   Puntero a la estructura del num complejo
+ * * @return void
+ * */
+void print_complex_t(complex_t *complex){
+  if (complex == NULL) {
+    return;
+  }
+
+  printf("%f %c %fi\n", complex->real, complex < 0 ? '-' : '+', complex->imag);
+}
+
+
+/*
+ * @brief Imprime una fecha en formato DD/MM/YYY
+ *
+ * Nada que comentar
+ *
+ * @param fecha   Puntero a struct de fecha
+ * * @return void
+ * */
+void print_date_t(date_t *fecha){
+  if (fecha == NULL) {
+    return;
+  }
+
+  printf("%d / %d / %d\n", fecha->day, fecha->month, fecha->year);
+}
+
+/*
+ * @brief Imprime las raíces de una ecuación cuadrática
+ *
+ * Si sus raíces son complejas llama a la función print_complex_t definida
+ * más arriba para imprimirlas en su forma binomial. Sino, imprime normal.
+ *
+ * @param roots   Puntero a agrupación de raíces de una ec. cuadrática
+ * * @return void
+ * */
+void print_root_t(root_t *roots){
+  if (roots == NULL) {
+    return;
+  }
+
+
+  if (roots->complex) {
+    complex_t r1 = {roots->real1, roots->imag1};
+    complex_t r2 = {roots->real2, roots->imag2};
+
+    printf("R1: ");
+    print_complex_t(&r1);
+    printf("R2: ");
+    print_complex_t(&r2);
+    return;
+  }
+
+  printf("R1: %f\n R2: %f\n", roots->real1, roots->real2);
+}
+
+/* FUNCIONES AUXILIARES */
+/* -------------------- */
+
+/*
+ * @brief función para liberar memoria alojada para una matriz
+ *
+ * Se encarga primero de liberar la memoria alojada para sus elementos
+ * y luego libera la estructura en sí.
+ *
+ * @param matriz  Puntero a matriz cuya memoria quiero liberar
+ * * @return void
+ * */
+void free_matrix(matriz_t *matriz){
+  if (matriz == NULL) {
+    return;
+  }
+
+  for (int i = 0; i < matriz->rows; i++) {
+      free(matriz->data[i]);
+  }
+
+  free(matriz->data);
+  free(matriz);
 }
