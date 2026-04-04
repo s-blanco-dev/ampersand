@@ -139,6 +139,7 @@ int compare_by_apellido(estudiante_t* a, estudiante_t* b){
   if (a->ci < b->ci) return -1;
   if (a->ci > b->ci) return 1;
   }
+  return 0;
 }
 
 /**
@@ -230,7 +231,7 @@ void heap_sort(estudiante_t** arr, int n, int (*cmp)(estudiante_t*, estudiante_t
     heapify(arr, n, i, cmp);
   }
   // uno por uno extraemos los elementos del heap:
-  for (int i = n - -1; i > 0; i--){
+  for (int i = n - 1; i > 0; i--){
     // movemos el root actual al final:
     estudiante_t* temp = arr[0];
     arr[0] = arr[i];
@@ -252,6 +253,31 @@ int list_lenght(node_t* head){
   return count;
 }
 
+/**
+ * @brief Ordena la lista enlazada de estudiantes según un criterio de comparación.
+ *
+ * Esta función toma la lista enlazada de estudiantes y la ordena utilizando
+ * un array auxiliar de punteros a estudiante_t. Primero recorre la lista y copia
+ * en el array los punteros a los estudiantes almacenados en cada nodo. Luego
+ * aplica Heap Sort sobre ese array, usando la función comparadora recibida
+ * como parámetro para definir el criterio de orden. Finalmente, recorre
+ * nuevamente la lista y reasigna los punteros a estudiante de cada nodo
+ * según el orden resultante en el array.
+ *
+ * Este enfoque permite usar Heap Sort, que funciona naturalmente sobre arrays,
+ * sin modificar los enlaces entre nodos de la lista enlazada.
+ *
+ * @param head Puntero al nodo cabecera de la lista enlazada.
+ * @param cmp Puntero a función comparadora que define el criterio de orden.
+ *            Debe retornar:
+ *              - un valor mayor que 0 si el primer estudiante es mayor que el segundo,
+ *              - 0 si ambos son equivalentes,
+ *              - un valor menor que 0 si el primero es menor que el segundo.
+ *
+ * @note Si la lista está vacía o tiene un solo elemento, la función no realiza cambios.
+ * @note La memoria del array auxiliar se reserva dinámicamente y se libera
+ *       antes de finalizar la función.
+ */
 void sort_list(node_t* head, int (*cmp)(estudiante_t*, estudiante_t*)){
 
   if (head == NULL || head->next == NULL){
@@ -287,10 +313,10 @@ void sort_list(node_t* head, int (*cmp)(estudiante_t*, estudiante_t*)){
   free(arr);
 }
 
-void sort_by_ci(node_t* head,){
+void sort_by_ci(node_t* head){
   sort_list(head, compare_by_ci);
 }
 
-void compare_by_apellido(node_t* head){
+void sort_by_apellido(node_t* head){
   sort_list(head, compare_by_apellido);
 }
