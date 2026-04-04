@@ -240,3 +240,57 @@ void heap_sort(estudiante_t** arr, int n, int (*cmp)(estudiante_t*, estudiante_t
   }
 }
 
+// Metodo para saber el largo de una lista
+int list_lenght(node_t* head){
+  int count = 0;
+  node_t* temp = head->next;
+
+  while (temp != NULL){
+    count++;
+    temp = temp->next;
+  }
+  return count;
+}
+
+void sort_list(node_t* head, int (*cmp)(estudiante_t*, estudiante_t*)){
+
+  if (head == NULL || head->next == NULL){
+    return;
+  }
+
+  int n = list_lenght(head);
+
+  estudiante_t** arr = malloc(n * sizeof(estudiante_t*));
+  if (arr == NULL){
+    return;
+  }
+  
+  node_t* temp = head->next;
+  int pp = 0;
+
+  while (temp != NULL){
+    arr[pp] = temp->estudiante;
+    pp++;
+    temp = temp->next;
+  }
+  // aplicamos nuestro algoritmo que marcha joya (heapsort > quicksort):
+  heap_sort(arr, n, cmp);
+
+  temp = head->next;
+  pp = 0;
+  while (temp != NULL){
+    temp->estudiante = arr[pp];
+    pp++;
+    temp = temp->next;
+    }
+
+  free(arr);
+}
+
+void sort_by_ci(node_t* head,){
+  sort_list(head, compare_by_ci);
+}
+
+void compare_by_apellido(node_t* head){
+  sort_list(head, compare_by_apellido);
+}
