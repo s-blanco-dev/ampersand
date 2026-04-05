@@ -91,4 +91,9 @@ void print_root_t(root_t* roots);
 void print_complex_t(complex_t* complex);
 void print_date_t(date_t* fecha);
 
+/* FUNCIONES AUXILIARES */
+/* -------------------- */
+
+void free_matrix(matriz_t* matriz);
+
 #endif // !GLOBAL_H

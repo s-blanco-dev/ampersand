@@ -1,11 +1,14 @@
 /* IMPLEMENTEN LAS FUNCIONES ACÁ */
 #include "global.h"
+#include <limits.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
 void init_lab() {
   printf("AMPERSAND:\nSantiago Blanco\nFelipe Paladino\nPiero Saucedo\n");
@@ -321,14 +324,304 @@ int swap(void *elem1, void *elem2, size_t data_type) {
   return 0;
 }
 
+/*
+ * @brief Encuentra e imprime el valor máximo y su índice en un array genérico.
+ *
+ * Recorre el array genérico asumiendo que los elementos son de tipo int.
+ * Compara cada elemento con el valor máximo actual y guarda su posición.
+ * Requiere que los datos sean interpretables como enteros.
+ *
+ * @param array      Array genérico (puntero al inicio del array)
+ * @param data_type  Tamaño en bytes de cada elemento
+ * @param array_size Cantidad de elementos en el array
+ * @return void
+ */
+void max_index(void *array, size_t data_type, size_t array_size) {
+  if (array != NULL && array_size != 0) {
+    size_t max = 0;
+    int max_idx = 0;
+    int *p = array;
+
+    for (size_t i = 0; i < array_size; i++) {
+      if (*p > max) {
+        max = *p;
+        max_idx = i;
+      }
+      p += data_type;
+    }
+
+    printf("Max value %zu at index %d", max, max_idx);
+  }
+}
+
+/*
+ * @brief Encuentra e imprime el valor mínimo y su índice en un array genérico.
+ *
+ * Recorre el array genérico asumiendo que los elementos son de tipo int.
+ * Compara cada elemento con el valor mínimo actual y guarda su posición.
+ * Inicializa el mínimo con SIZE_MAX para asegurar que cualquier valor sea
+ * menor. Requiere que los datos sean interpretables como enteros.
+ *
+ * @param array      Array genérico (puntero al inicio del array)
+ * @param data_type  Tamaño en bytes de cada elemento
+ * @param array_size Cantidad de elementos en el array
+ * @return void
+ */
+void min_index(void *array, size_t data_type, size_t array_size) {
+  if (array != NULL && array_size != 0) {
+    size_t min = SIZE_MAX;
+    int min_idx = 0;
+    int *p = array;
+
+    for (size_t i = 0; i < array_size; i++) {
+      if (*p < min) {
+        min = *p;
+        min_idx = i;
+      }
+      p += data_type;
+    }
+
+    printf("Min value %zu at index %d", min, min_idx);
+  }
+}
+
+/*
+ * @brief Convierte un string binario a su equivalente decimal.
+ *
+ * Recorre el string de caracteres binarios ('0' o '1') y calcula su valor
+ * decimal mediante potencias de 2. Si el parámetro sign es true, interpreta
+ * el primer bit como signo (complemento a 2) para números negativos.
+ *
+ * @param binary Puntero al string binario a convertir
+ * @param sign   Booleano que indica si el número está en complemento a 2
+ * @return int32_t Valor decimal resultante de la conversión
+ */
+int32_t bin2dec(char *binary, bool sign) {
+  int base = 2;
+  int exp = strlen(binary) - 1;
+  int number = 0;
+  char *p = binary;
+
+  int is_negative = sign && (*p == '1');
+
+  while (*p != '\0') {
+    int n = *p - '0';
+    number += n * (int)pow(base, exp);
+    --exp;
+    p++;
+  }
+
+  if (is_negative) {
+    number -= (int)pow(base, strlen(binary));
+  }
+
+  return number;
+}
+
+/*
+ * @brief Cuenta la cantidad de vocales en un string.
+ *
+ * Recorre el string carácter por carácter y verifica si pertenece al conjunto
+ * de vocales (mayúsculas o minúsculas). Incrementa un contador por cada vocal
+ * encontrada.
+ *
+ * @param string Puntero al string a analizar
+ * @return int Cantidad de vocales en el string
+ */
+int vocales(char *string) {
+  int count = 0;
+  char vocals[] = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+  int len = sizeof(vocals) / sizeof(vocals[0]);
+  char *p = &string[0];
+
+  while (*p != '\0') {
+    for (int i = 0; i < len; i++) {
+      if (*p == vocals[i]) {
+        count++;
+        break;
+      }
+    }
+    ++p;
+  }
+
+  return count;
+}
+
+/*
+ * @brief Cuenta la cantidad de consonantes en un string.
+ *
+ * Recorre el string carácter por carácter, verifica que sea una letra
+ * (mayúscula o minúscula) y que no sea vocal. Incrementa un contador
+ * por cada consonante encontrada.
+ *
+ * @param string Puntero al string a analizar
+ * @return int Cantidad de consonantes en el string
+ */
+int consonantes(char *string) {
+  int count = 0;
+  char *p = &string[0];
+  while (*p != '\0') {
+    if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z')) {
+      if (*p != 'a' && *p != 'e' && *p != 'i' && *p != 'o' && *p != 'u' &&
+          *p != 'A' && *p != 'E' && *p != 'I' && *p != 'O' && *p != 'U') {
+        count++;
+      }
+    }
+    ++p;
+  }
+  return count;
+}
+
+/*
+ * @brief Calcula la cantidad de días entre dos fechas.
+ *
+ * Convierte las estructuras date_t a struct tm, calcula la diferencia en
+ * segundos usando difftime y convierte el resultado a días.
+ * Asume que finish es posterior a start.
+ *
+ * @param start  Fecha de inicio
+ * @param finish Fecha de fin
+ * @return int Diferencia en días entre ambas fechas
+ */
+int days_left(date_t start, date_t finish) {
+  struct tm t_start = {0};
+  t_start.tm_mday = start.day;
+  t_start.tm_mon = start.month - 1;
+  t_start.tm_year = start.year - 1900;
+
+  struct tm t_finish = {0};
+  t_finish.tm_mday = finish.day;
+  t_finish.tm_mon = finish.month - 1;
+  t_finish.tm_year = finish.year - 1900;
+
+  double diff_seconds = difftime(mktime(&t_finish), mktime(&t_start));
+  return (int)(diff_seconds / 86400);
+}
+
 /* DEFINO FUNCIONES DE IMPRESION DE TIPOS */
 /* ------------------------------------- */
 
+/*
+ * @brief Imprime una matriz dada
+ *
+ * Imprime los coeficientes de una matriz A = (a_ij) de
+ * dimensiones mxn en la forma a_i1, a_i2,..., ai_n
+ * para todo i desde 1 hasta m.
+ *
+ * @param matriz  Puntero a la matriz a imprimir
+ * * @return void
+ * */
 void print_matriz_t(matriz_t *matriz) {
+  if (matriz == NULL) {
+    return;
+  }
   for (int i = 0; i < matriz->rows; i++) {
     for (int j = 0; j < matriz->cols; j++) {
       printf("%d\t", matriz->data[i][j]);
     }
     printf("\n");
   }
+}
+
+/*
+ * @brief Imprime una agrupación de coeficientes
+ *
+ * Nada que agregar
+ *
+ * @param coeficientes  puntero a la agrupación de coeficientes
+ * * @return void
+ * */
+void print_coeff_t(coeff_t *coeficientes) {
+  if (coeficientes == NULL) {
+    return;
+  }
+
+  printf("Coeficientes:\na: %d\nb: %d\nc: %d\n", coeficientes->a,
+         coeficientes->b, coeficientes->c);
+}
+
+/*
+ * @brief Imprime un número complejo en su forma binomial
+ *
+ * Lo único que podría requerir explicación es el uso del operador
+ * ternario para imprimir '-' o '+' en base al signo de la parte imaginaria.
+ *
+ * @param complex   Puntero a la estructura del num complejo
+ * * @return void
+ * */
+void print_complex_t(complex_t *complex) {
+  if (complex == NULL) {
+    return;
+  }
+
+  printf("%f %c %fi\n", complex->real, complex < 0 ? '-' : '+', complex->imag);
+}
+
+/*
+ * @brief Imprime una fecha en formato DD/MM/YYY
+ *
+ * Nada que comentar
+ *
+ * @param fecha   Puntero a struct de fecha
+ * * @return void
+ * */
+void print_date_t(date_t *fecha) {
+  if (fecha == NULL) {
+    return;
+  }
+
+  printf("%d / %d / %d\n", fecha->day, fecha->month, fecha->year);
+}
+
+/*
+ * @brief Imprime las raíces de una ecuación cuadrática
+ *
+ * Si sus raíces son complejas llama a la función print_complex_t definida
+ * más arriba para imprimirlas en su forma binomial. Sino, imprime normal.
+ *
+ * @param roots   Puntero a agrupación de raíces de una ec. cuadrática
+ * * @return void
+ * */
+void print_root_t(root_t *roots) {
+  if (roots == NULL) {
+    return;
+  }
+
+  if (roots->complex) {
+    complex_t r1 = {roots->real1, roots->imag1};
+    complex_t r2 = {roots->real2, roots->imag2};
+
+    printf("R1: ");
+    print_complex_t(&r1);
+    printf("R2: ");
+    print_complex_t(&r2);
+    return;
+  }
+
+  printf("R1: %f\n R2: %f\n", roots->real1, roots->real2);
+}
+
+/* FUNCIONES AUXILIARES */
+/* -------------------- */
+
+/*
+ * @brief función para liberar memoria alojada para una matriz
+ *
+ * Se encarga primero de liberar la memoria alojada para sus elementos
+ * y luego libera la estructura en sí.
+ *
+ * @param matriz  Puntero a matriz cuya memoria quiero liberar
+ * * @return void
+ * */
+void free_matrix(matriz_t *matriz) {
+  if (matriz == NULL) {
+    return;
+  }
+
+  for (int i = 0; i < matriz->rows; i++) {
+    free(matriz->data[i]);
+  }
+
+  free(matriz->data);
+  free(matriz);
 }
