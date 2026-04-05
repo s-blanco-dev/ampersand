@@ -98,6 +98,44 @@ int main() {
   swap(&a, &b, sizeof(int));
   printf("Elemento 1: %d -> Elemento 2: %d\n", a, b);
 
+  printf("\n=== TEST 5: days_left ===\n");
+  date_t d1 = {1, 1, 2024};
+  date_t d2 = {31, 12, 2024}; // 2024 is a leap year
+  date_t d3 = {1, 1, 2023};
+  date_t d4 = {31, 12, 2023}; // 2023 is not a leap year
+  printf("2024 (bisiesto) Jan 1 -> Dec 31:     %d dias\n", days_left(d1, d2));
+  printf("2023 (no bisiesto) Jan 1 -> Dec 31:  %d dias\n", days_left(d3, d4));
+  printf("Fechas invertidas (negativo):         %d dias\n", days_left(d2, d1));
+
+  printf("\n=== TEST 6: vocales ===\n");
+  printf("'Hello World':     %d vocales\n", vocales("Hello World"));
+  printf("'aeiou':           %d vocales\n", vocales("aeiou"));
+  printf("'AEIOU':           %d vocales\n", vocales("AEIOU"));
+  printf("'bcdfg':           %d vocales\n", vocales("bcdfg"));
+  printf("'':                %d vocales\n", vocales(""));
+
+  printf("\n=== TEST 7: consonantes ===\n");
+  printf("'Hello World':     %d consonantes\n", consonantes("Hello World"));
+  printf("'aeiou':           %d consonantes\n", consonantes("aeiou"));
+  printf("'bcdfg':           %d consonantes\n", consonantes("bcdfg"));
+  printf("'123!':            %d consonantes\n", consonantes("123!"));
+
+  printf("\n=== TEST 8: max_index / min_index ===\n");
+  int nums[] = {3, 7, 1, 9, 4};
+  printf("Array: {3, 7, 1, 9, 4}\n");
+  printf("Max -> ");
+  max_index(nums, sizeof(int), 5);
+  printf("\n");
+  printf("Min -> ");
+  min_index(nums, sizeof(int), 5);
+  printf("\n");
+
+  printf("\n=== TEST 9: bin2dec ===\n");
+  printf("'1010' sin signo:  %d\n", bin2dec("1010", false));
+  printf("'0110' sin signo:  %d\n", bin2dec("0110", false));
+  printf("'1010' con signo:  %d\n", bin2dec("1010", true));
+  printf("'0110' con signo:  %d\n", bin2dec("0110", true));
+  printf("'11111111' con signo: %d\n", bin2dec("11111111", true));
+
   return 0;
 }
-
