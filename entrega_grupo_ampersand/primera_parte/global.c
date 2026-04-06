@@ -650,7 +650,7 @@ void print_root_t(root_t *roots) {
  * * @return void
  * */
 void free_matrix(matriz_t *matriz) {
-  if (matriz == NULL) {
+  if (matriz == NULL || matriz->data == NULL) {
     return;
   }
 
@@ -659,5 +659,4 @@ void free_matrix(matriz_t *matriz) {
   }
 
   free(matriz->data);
-  free(matriz);
 }

@@ -51,6 +51,7 @@ int main() {
   free_matrix(&A);
   free_matrix(&B);
   free_matrix(res);
+  free(res);
 
   char string[] = "In this lecture we will talk about embebbed systems. For "
                   "instance, take a car, that could be an embbebed devicee.";
