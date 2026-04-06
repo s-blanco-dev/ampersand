@@ -297,6 +297,42 @@ int32_t string_words(char *string) {
 }
 
 /**
+ * @brief Busca la ocurrencia de un substring (needle) dentro de un string (haystack).
+ *
+ * Recorre el string principal (haystack) carácter por carácter e intenta
+ * verificar en cada posición si el substring (needle) comienza en esa posición.
+ * Para ello compara secuencialmente los caracteres de ambos strings.
+ *
+ * Si encuentra una coincidencia completa del substring, retorna el índice
+ * en el cual comienza dicha coincidencia dentro del haystack.
+ *
+ * @param haystack Puntero al string principal donde se realizará la búsqueda.
+ * @param needle Puntero al substring que se desea encontrar.
+ * @return int Índice de la primera ocurrencia de needle en haystack,
+ *         o -1 si no se encuentra o si alguno de los punteros es NULL.
+ */
+int find_in_string(char *haystack, char *needle){
+
+  if (haystack == NULL || needle == NULL){
+    return -1;
+  }
+
+  for (int i = 0; haystack != '\0'; i++){
+    // "i" recorre la el haystack (la palabra grande), mientras que "k" recorre needle (la palabra chica).
+    int k = 0;
+
+    while (needle[k] != '\0' && haystack[i + k] == needle[k]){
+      k++;
+    }
+
+    if (needle[k] == '\0'){
+      return i;
+    }
+  }
+  return -1;
+}
+
+/**
  * @brief Intercambia el contenido de dos elementos genéricos.
  *
  * La función interpreta ambos elementos como bloques de memoria de tamaño
