@@ -194,6 +194,18 @@ void print_reverse_array(void *array, size_t data_type, size_t array_size) {
   }
 }
 
+/* @brief imprime y retorna el string proporcionado en orden inverso usando un puntero a ese string.
+ *  
+ *  Recorre el string original para definir la longitud del mismo (len).
+ *  Reserva un espacio en memoria usando malloc, para guardar un array "reversed" que sera el string dado vuelta.
+ *
+ *  Va llenando "reversed" con los caracteres de "string" de derecha a izquierda, hasta completarlo.
+ *  Finalmente, se le añade el caracter '\0'.
+ *
+ * @param char *string
+ * @return reversed
+ *
+ * */
 char *reverse_string(char *string){
   if (string == NULL){
     return NULL;

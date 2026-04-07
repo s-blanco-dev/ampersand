@@ -107,7 +107,6 @@ void test_string_ops(void) {
   
   printf("Reversed:\n");
   reverse_string(string);
-  printf("%s", string);
   printf("Caps:\n");
   string_to_caps(string);
   printf("%s\n\n", string);
