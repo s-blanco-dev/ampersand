@@ -111,11 +111,13 @@ matriz_t *matrix_sub(matriz_t A, matriz_t B) {
 
   // pido espacio para las entradas de la matriz
   C->data = malloc(C->rows * sizeof(int16_t *));
-  for (int i = 0; i < C->rows; i++) {
-    C->data[i] = malloc(C->cols * sizeof(int16_t));
-  }
+
   if (C->data == NULL) {
     return NULL;
+  }
+
+  for (int i = 0; i < C->rows; i++) {
+    C->data[i] = malloc(C->cols * sizeof(int16_t));
   }
 
   // O(n^2)
@@ -217,7 +219,7 @@ void string_to_caps(char *string) {
 
   while (*string != '\0') {
     if (*string >= 'a' && *string <= 'z') {
-      // En ACII, la diferencia entre las mayusculas y minusculas es de 32.
+      // En ASCII, la diferencia entre las mayusculas y minusculas es de 32.
       *string = *string - 32;
     }
     string++;
@@ -291,13 +293,16 @@ int32_t string_words(char *string) {
 
       palabras++;
     }
+
     pp++;
   }
+
   return palabras;
 }
 
 /**
- * @brief Busca la ocurrencia de un substring (needle) dentro de un string (haystack).
+ * @brief Busca la ocurrencia de un substring (needle) dentro de un string
+ * (haystack).
  *
  * Recorre el string principal (haystack) carácter por carácter e intenta
  * verificar en cada posición si el substring (needle) comienza en esa posición.
@@ -311,24 +316,25 @@ int32_t string_words(char *string) {
  * @return int Índice de la primera ocurrencia de needle en haystack,
  *         o -1 si no se encuentra o si alguno de los punteros es NULL.
  */
-int find_in_string(char *haystack, char *needle){
-
-  if (haystack == NULL || needle == NULL){
+int find_in_string(char *haystack, char *needle) {
+  if (haystack == NULL || needle == NULL) {
     return -1;
   }
 
-  for (int i = 0; haystack != '\0'; i++){
-    // "i" recorre la el haystack (la palabra grande), mientras que "k" recorre needle (la palabra chica).
+  for (int i = 0; haystack != '\0'; i++) {
+    // "i" recorre la el haystack (la palabra grande), mientras que "k" recorre
+    // needle (la palabra chica).
     int k = 0;
 
-    while (needle[k] != '\0' && haystack[i + k] == needle[k]){
+    while (needle[k] != '\0' && haystack[i + k] == needle[k]) {
       k++;
     }
 
-    if (needle[k] == '\0'){
+    if (needle[k] == '\0') {
       return i;
     }
   }
+
   return -1;
 }
 
@@ -347,6 +353,7 @@ int swap(void *elem1, void *elem2, size_t data_type) {
   if (elem1 == NULL || elem2 == NULL) {
     return -1;
   }
+
   char *a = (char *)elem1;
   // al castear a char puedo copiar cualquier dato byte a byte, esto
   // independientemente del tipo de dato original.
@@ -357,6 +364,7 @@ int swap(void *elem1, void *elem2, size_t data_type) {
     a[pp] = b[pp];
     b[pp] = temp;
   }
+
   return 0;
 }
 
@@ -508,11 +516,36 @@ int consonantes(char *string) {
   return count;
 }
 
+// /*
+//  * @brief Calcula la cantidad de días entre dos fechas.
+//  *
+//  * Convierte las estructuras date_t a struct tm, calcula la diferencia en
+//  * segundos usando difftime y convierte el resultado a días.
+//  * Asume que finish es posterior a start.
+//  *
+//  * @param start  Fecha de inicio
+//  * @param finish Fecha de fin
+//  * @return int Diferencia en días entre ambas fechas
+//  */
+// int days_left(date_t start, date_t finish) {
+//   struct tm t_start = {0};
+//   t_start.tm_mday = start.day;
+//   t_start.tm_mon = start.month - 1;
+//   t_start.tm_year = start.year - 1900;
+
+//   struct tm t_finish = {0};
+//   t_finish.tm_mday = finish.day;
+//   t_finish.tm_mon = finish.month - 1;
+//   t_finish.tm_year = finish.year - 1900;
+
+//   double diff_seconds = difftime(mktime(&t_finish), mktime(&t_start));
+//   return (int)(diff_seconds / 86400);
+// }
+
 /*
  * @brief Calcula la cantidad de días entre dos fechas.
  *
- * Convierte las estructuras date_t a struct tm, calcula la diferencia en
- * segundos usando difftime y convierte el resultado a días.
+ * No utiliza <time.h>
  * Asume que finish es posterior a start.
  *
  * @param start  Fecha de inicio
@@ -520,18 +553,7 @@ int consonantes(char *string) {
  * @return int Diferencia en días entre ambas fechas
  */
 int days_left(date_t start, date_t finish) {
-  struct tm t_start = {0};
-  t_start.tm_mday = start.day;
-  t_start.tm_mon = start.month - 1;
-  t_start.tm_year = start.year - 1900;
-
-  struct tm t_finish = {0};
-  t_finish.tm_mday = finish.day;
-  t_finish.tm_mon = finish.month - 1;
-  t_finish.tm_year = finish.year - 1900;
-
-  double diff_seconds = difftime(mktime(&t_finish), mktime(&t_start));
-  return (int)(diff_seconds / 86400);
+  return (int)(date_to_days(finish) - date_to_days(start));
 }
 
 /* DEFINO FUNCIONES DE IMPRESION DE TIPOS */
@@ -659,4 +681,26 @@ void free_matrix(matriz_t *matriz) {
   }
 
   free(matriz->data);
+}
+
+int is_leap(int16_t year) {
+  return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+}
+
+long leap_years_before(int16_t y) {
+  y--;
+  return (y / 4) - (y / 100) + (y / 400);
+}
+
+long date_to_days(date_t d) {
+  long days = (long)(d.year - 1) * 365 + leap_years_before(d.year);
+
+  for (int m = 1; m < d.month; m++) {
+    days += DAYS_IN_MONTH[m];
+    if (m == 2 && is_leap(d.year))
+      days++;
+  }
+
+  days += d.day;
+  return days;
 }
