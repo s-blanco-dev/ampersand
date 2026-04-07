@@ -415,13 +415,14 @@ void min_index(void *array, size_t data_type, size_t array_size) {
   if (array != NULL && array_size != 0) {
     size_t min = SIZE_MAX;
     int min_idx = 0;
-    int *p = array;
+    unsigned char *p = (unsigned char *)array;
 
     for (size_t i = 0; i < array_size; i++) {
       if (*p < min) {
         min = *p;
         min_idx = i;
       }
+
       p += data_type;
     }
 
