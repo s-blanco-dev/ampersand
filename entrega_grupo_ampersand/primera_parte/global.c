@@ -10,6 +10,8 @@
 #include <string.h>
 #include <time.h>
 
+const int DAYS_IN_MONTH[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
 void init_lab() {
   printf("AMPERSAND:\nSantiago Blanco\nFelipe Paladino\nPiero Saucedo\n");
 }
@@ -21,7 +23,7 @@ void init_lab() {
  * El lector ya está familiarizado con la resolución de ecuaciones cuadráticas.
  *
  * @param coeficientes      Puntero a estructura de coeficientes enteros a,b,c.
- * * @return root_t*      Devuelve puntero a estructura de raíces (partes reales
+ * @return root_t*      Devuelve puntero a estructura de raíces (partes reales
  * e imag).
  */
 root_t *eq_solver(coeff_t *coeficientes) {
@@ -31,12 +33,9 @@ root_t *eq_solver(coeff_t *coeficientes) {
 
   root_t *result = malloc(sizeof(root_t));
   if (result == NULL) {
-    // falleció malloc
     return NULL;
   }
 
-  /* por defecto inicializo el resultado con raíces reales
-   * (parte imaginaria 0) */
   result->imag1 = 0;
   result->imag2 = 0;
   result->complex = false;
@@ -47,6 +46,7 @@ root_t *eq_solver(coeff_t *coeficientes) {
   c = coeficientes->c;
 
   float disc = b * b - (4.0 * a * c);
+
   if (disc < 0) {
     float c1 = sqrt(-disc) / (2.0 * a);
     result->complex = true;
@@ -88,16 +88,11 @@ root_t *eq_solver(coeff_t *coeficientes) {
  *
  * @param A   matriz_t que se pasa por valor, se le restará B
  * @param B   matriz_t que se pasa por valor, será restada a A
- * * @return matriz_t*  Puntero a estructura de matriz resultado de la resta.
- * * NULL si no se pudo completar la operación.
- * */
+ * @return matriz_t*  Puntero a estructura de matriz resultado de la resta.
+ * NULL si no se pudo completar la operación.
+ */
 matriz_t *matrix_sub(matriz_t A, matriz_t B) {
-  /* La suma de matrices para dos matrices A y B de mxn resulta en una matriz
-   * C de mxn donde cada entrada c_ij = a_ij + b_ij
-   * --> Evidentemente, la resta se define de manera análoga */
-
   if (A.rows != B.rows || A.cols != B.cols) {
-    // NO SE PUEDEN SUMAR DOS MATRICES DE DIMENSIONES DISTINTAS
     return NULL;
   }
 
@@ -109,9 +104,7 @@ matriz_t *matrix_sub(matriz_t A, matriz_t B) {
   C->cols = A.cols;
   C->rows = A.rows;
 
-  // pido espacio para las entradas de la matriz
   C->data = malloc(C->rows * sizeof(int16_t *));
-
   if (C->data == NULL) {
     return NULL;
   }
@@ -120,7 +113,6 @@ matriz_t *matrix_sub(matriz_t A, matriz_t B) {
     C->data[i] = malloc(C->cols * sizeof(int16_t));
   }
 
-  // O(n^2)
   for (int i = 0; i < A.rows; i++) {
     for (int j = 0; j < A.cols; j++) {
       C->data[i][j] = A.data[i][j] - B.data[i][j];
@@ -138,10 +130,10 @@ matriz_t *matrix_sub(matriz_t A, matriz_t B) {
  *
  * @param a struct complex_t que se pasa por valor
  * @param b idem
- * * @return complex_t*, un número complejo con dos atributos para la parte real
+ * @return complex_t*, un número complejo con dos atributos para la parte real
  * e imaginaria
- * * NULL si hay un error asignando memoria
- * */
+ * NULL si hay un error asignando memoria
+ */
 complex_t *sum(complex_t a, complex_t b) {
   complex_t *result = malloc(sizeof(complex_t));
   if (result == NULL) {
@@ -162,9 +154,9 @@ complex_t *sum(complex_t a, complex_t b) {
  *
  * @param a struct complex_t que se pasa por valor
  * @param b idem
- * * @return complex_t*, un puntero a número complejo con dos atributos para la
- * * parte real e imaginaria. NULL si hay un error asignando memoria
- * */
+ * @return complex_t*, un puntero a número complejo con dos atributos para la
+ * parte real e imaginaria. NULL si hay un error asignando memoria
+ */
 complex_t *prod(complex_t a, complex_t b) {
   complex_t *result = malloc(sizeof(complex_t));
   if (result == NULL) {
@@ -187,20 +179,18 @@ complex_t *prod(complex_t a, complex_t b) {
  * @param array   Array genérico (puntero al inicio del array)
  * @param data_type  tamaño del tipo de dato
  * @param array_size  cantidad de elementos
- * * @return void
- * */
+ * @return void
+ */
 void print_reverse_array(void *array, size_t data_type, size_t array_size) {
   if (array == NULL || array_size == 0 || data_type == 0) {
     return;
   }
 
-  unsigned char *arr_ptr = (unsigned char *)array; // camina de a 1 byte ahora
+  unsigned char *arr_ptr = (unsigned char *)array;
 
   for (size_t i = array_size; i > 0; i--) {
     unsigned char *curr = arr_ptr + ((i - 1) * data_type);
-    // ante la incertidumbre, imprimo lo que haya adentro en hexa
-    // temporal
-    printf("%02X\n", *(arr_ptr + i));
+    printf("%02X\n", *curr);
   }
 }
 
@@ -219,7 +209,6 @@ void string_to_caps(char *string) {
 
   while (*string != '\0') {
     if (*string >= 'a' && *string <= 'z') {
-      // En ASCII, la diferencia entre las mayusculas y minusculas es de 32.
       *string = *string - 32;
     }
     string++;
@@ -256,14 +245,15 @@ void string_to_min(char *string) {
  * @return int32_t Longitud del string, o -1 si el puntero es NULL.
  */
 int32_t string_length(char *string) {
-  // Evidentemente, si se proporciona un string NULL, no me sirve para nada.
   if (string == NULL) {
     return -1;
   }
+
   int32_t count = 0;
   while (string[count] != '\0') {
     count++;
   }
+
   return count;
 }
 
@@ -285,12 +275,7 @@ int32_t string_words(char *string) {
   int pp = 0;
 
   while (string[pp] != '\0') {
-    /* Puedo decir que hay una palabrita si:
-     * el indice en el que estoy parado NO es " ", y ademas, si el indice
-     * anterior SI era " " o bien es el inicio.
-     */
     if (string[pp] != ' ' && (pp == 0 || string[pp - 1] == ' ')) {
-
       palabras++;
     }
 
@@ -322,8 +307,6 @@ int find_in_string(char *haystack, char *needle) {
   }
 
   for (int i = 0; haystack[i] != '\0'; i++) {
-    // "i" recorre la el haystack (la palabra grande), mientras que "k" recorre
-    // needle (la palabra chica).
     int k = 0;
 
     while (needle[k] != '\0' && haystack[i + k] == needle[k]) {
@@ -355,8 +338,6 @@ int swap(void *elem1, void *elem2, size_t data_type) {
   }
 
   char *a = (char *)elem1;
-  // al castear a char puedo copiar cualquier dato byte a byte, esto
-  // independientemente del tipo de dato original.
   char *b = (char *)elem2;
 
   for (size_t pp = 0; pp < data_type; pp++) {
@@ -505,6 +486,7 @@ int vocales(char *string) {
 int consonantes(char *string) {
   int count = 0;
   char *p = &string[0];
+
   while (*p != '\0') {
     if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z')) {
       if (*p != 'a' && *p != 'e' && *p != 'i' && *p != 'o' && *p != 'u' &&
@@ -514,34 +496,9 @@ int consonantes(char *string) {
     }
     ++p;
   }
+
   return count;
 }
-
-// /*
-//  * @brief Calcula la cantidad de días entre dos fechas.
-//  *
-//  * Convierte las estructuras date_t a struct tm, calcula la diferencia en
-//  * segundos usando difftime y convierte el resultado a días.
-//  * Asume que finish es posterior a start.
-//  *
-//  * @param start  Fecha de inicio
-//  * @param finish Fecha de fin
-//  * @return int Diferencia en días entre ambas fechas
-//  */
-// int days_left(date_t start, date_t finish) {
-//   struct tm t_start = {0};
-//   t_start.tm_mday = start.day;
-//   t_start.tm_mon = start.month - 1;
-//   t_start.tm_year = start.year - 1900;
-
-//   struct tm t_finish = {0};
-//   t_finish.tm_mday = finish.day;
-//   t_finish.tm_mon = finish.month - 1;
-//   t_finish.tm_year = finish.year - 1900;
-
-//   double diff_seconds = difftime(mktime(&t_finish), mktime(&t_start));
-//   return (int)(diff_seconds / 86400);
-// }
 
 /*
  * @brief Calcula la cantidad de días entre dos fechas.
@@ -568,12 +525,13 @@ int days_left(date_t start, date_t finish) {
  * para todo i desde 1 hasta m.
  *
  * @param matriz  Puntero a la matriz a imprimir
- * * @return void
- * */
+ * @return void
+ */
 void print_matriz_t(matriz_t *matriz) {
   if (matriz == NULL) {
     return;
   }
+
   for (int i = 0; i < matriz->rows; i++) {
     for (int j = 0; j < matriz->cols; j++) {
       printf("%d\t", matriz->data[i][j]);
@@ -588,8 +546,8 @@ void print_matriz_t(matriz_t *matriz) {
  * Nada que agregar
  *
  * @param coeficientes  puntero a la agrupación de coeficientes
- * * @return void
- * */
+ * @return void
+ */
 void print_coeff_t(coeff_t *coeficientes) {
   if (coeficientes == NULL) {
     return;
@@ -606,14 +564,15 @@ void print_coeff_t(coeff_t *coeficientes) {
  * ternario para imprimir '-' o '+' en base al signo de la parte imaginaria.
  *
  * @param complex   Puntero a la estructura del num complejo
- * * @return void
- * */
+ * @return void
+ */
 void print_complex_t(complex_t *complex) {
   if (complex == NULL) {
     return;
   }
 
-  printf("%f %c %fi\n", complex->real, complex < 0 ? '-' : '+', complex->imag);
+  printf("%f %c %fi\n", complex->real, complex->imag < 0 ? '-' : '+',
+         complex->imag);
 }
 
 /*
@@ -622,8 +581,8 @@ void print_complex_t(complex_t *complex) {
  * Nada que comentar
  *
  * @param fecha   Puntero a struct de fecha
- * * @return void
- * */
+ * @return void
+ */
 void print_date_t(date_t *fecha) {
   if (fecha == NULL) {
     return;
@@ -639,8 +598,8 @@ void print_date_t(date_t *fecha) {
  * más arriba para imprimirlas en su forma binomial. Sino, imprime normal.
  *
  * @param roots   Puntero a agrupación de raíces de una ec. cuadrática
- * * @return void
- * */
+ * @return void
+ */
 void print_root_t(root_t *roots) {
   if (roots == NULL) {
     return;
@@ -670,8 +629,8 @@ void print_root_t(root_t *roots) {
  * y luego libera la estructura en sí.
  *
  * @param matriz  Puntero a matriz cuya memoria quiero liberar
- * * @return void
- * */
+ * @return void
+ */
 void free_matrix(matriz_t *matriz) {
   if (matriz == NULL || matriz->data == NULL) {
     return;
