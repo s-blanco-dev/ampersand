@@ -321,7 +321,7 @@ int find_in_string(char *haystack, char *needle) {
     return -1;
   }
 
-  for (int i = 0; haystack != '\0'; i++) {
+  for (int i = 0; haystack[i] != '\0'; i++) {
     // "i" recorre la el haystack (la palabra grande), mientras que "k" recorre
     // needle (la palabra chica).
     int k = 0;
