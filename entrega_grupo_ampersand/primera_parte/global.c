@@ -364,13 +364,13 @@ int swap(void *elem1, void *elem2, data_type_t data_type) {
 int max_index(void *array, data_type_t data_type, size_t array_size) {
   if (array != NULL && array_size != 0) {
     size_t max = 0;
-    int max_idx = 0;
+    // int max_idx = 0;
     unsigned char *p = (unsigned char *)array;
 
     for (size_t i = 0; i < array_size; i++) {
       if (*p > max) {
         max = *p;
-        max_idx = i;
+        // max_idx = i;
       }
       p += data_type;
     }
@@ -395,13 +395,13 @@ int max_index(void *array, data_type_t data_type, size_t array_size) {
 int min_index(void *array, data_type_t data_type, size_t array_size) {
   if (array != NULL && array_size != 0) {
     size_t min = SIZE_MAX;
-    int min_idx = 0;
+    // int min_idx = 0;
     unsigned char *p = (unsigned char *)array;
 
     for (size_t i = 0; i < array_size; i++) {
       if (*p < min) {
         min = *p;
-        min_idx = i;
+        // min_idx = i;
       }
 
       p += data_type;
