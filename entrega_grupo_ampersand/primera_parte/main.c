@@ -104,7 +104,9 @@ void test_string_ops(void) {
                   "instance, take a car, that could be an embbebed devicee.";
 
   printf("Original:\n%s\n\n", string);
-
+  
+  printf("Reversed:\n");
+  reverse_string(string);
   printf("Caps:\n");
   string_to_caps(string);
   printf("%s\n\n", string);
