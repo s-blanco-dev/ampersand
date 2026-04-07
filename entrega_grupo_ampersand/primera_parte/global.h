@@ -5,6 +5,10 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+const int DAYS_IN_MONTH[] = {
+    0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+};
+
 /* DECLARACION DE TIPOS */
 /* ------------------- */
 
@@ -95,5 +99,7 @@ void print_date_t(date_t* fecha);
 /* -------------------- */
 
 void free_matrix(matriz_t* matriz);
+int is_leap(int16_t year);
+long date_to_days(date_t d);
 
 #endif // !GLOBAL_H
