@@ -222,7 +222,8 @@ char *reverse_string(char *string){
   while (string[len] != '\0'){
     len++;
   }
-  char *reversed = (char *)malloc((len - 1) * sizeof(char));
+  
+  char *reversed = (char *)malloc((len + 1) * sizeof(char));
   if (reversed == NULL){
     return NULL;
   }
