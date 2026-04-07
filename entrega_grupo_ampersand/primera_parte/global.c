@@ -337,8 +337,8 @@ int swap(void *elem1, void *elem2, size_t data_type) {
     return -1;
   }
 
-  char *a = (char *)elem1;
-  char *b = (char *)elem2;
+  unsigned char *a = elem1;
+  unsigned char *b = elem2;
 
   for (size_t pp = 0; pp < data_type; pp++) {
     char temp = a[pp];
