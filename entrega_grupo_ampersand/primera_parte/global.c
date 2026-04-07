@@ -181,7 +181,7 @@ complex_t *prod(complex_t a, complex_t b) {
  * @param array_size  cantidad de elementos
  * @return void
  */
-void print_reverse_array(void *array, size_t data_type, size_t array_size) {
+void print_reverse_array(void *array, data_type_t data_type, size_t array_size) {
   if (array == NULL || array_size == 0 || data_type == 0) {
     return;
   }
@@ -332,7 +332,7 @@ int find_in_string(char *haystack, char *needle) {
  * @param data_type Tamaño en bytes del tipo de dato a intercambiar.
  * @return int Retorna 0 si tuvo éxito, o -1 si alguno de los punteros es NULL.
  */
-int swap(void *elem1, void *elem2, size_t data_type) {
+int swap(void *elem1, void *elem2, data_type_t data_type) {
   if (elem1 == NULL || elem2 == NULL) {
     return -1;
   }
@@ -359,9 +359,9 @@ int swap(void *elem1, void *elem2, size_t data_type) {
  * @param array      Array genérico (puntero al inicio del array)
  * @param data_type  Tamaño en bytes de cada elemento
  * @param array_size Cantidad de elementos en el array
- * @return void
+ * @return int  Si falló, retorna -1, sino retorna el max
  */
-void max_index(void *array, size_t data_type, size_t array_size) {
+int max_index(void *array, data_type_t data_type, size_t array_size) {
   if (array != NULL && array_size != 0) {
     size_t max = 0;
     int max_idx = 0;
@@ -374,9 +374,9 @@ void max_index(void *array, size_t data_type, size_t array_size) {
       }
       p += data_type;
     }
-
-    printf("Max value %zu at index %d", max, max_idx);
+    return max;
   }
+  return -1;
 }
 
 /*
@@ -392,7 +392,7 @@ void max_index(void *array, size_t data_type, size_t array_size) {
  * @param array_size Cantidad de elementos en el array
  * @return void
  */
-void min_index(void *array, size_t data_type, size_t array_size) {
+int min_index(void *array, data_type_t data_type, size_t array_size) {
   if (array != NULL && array_size != 0) {
     size_t min = SIZE_MAX;
     int min_idx = 0;
@@ -407,8 +407,9 @@ void min_index(void *array, size_t data_type, size_t array_size) {
       p += data_type;
     }
 
-    printf("Min value %zu at index %d", min, min_idx);
+    return min;
   }
+  return -1;
 }
 
 /*

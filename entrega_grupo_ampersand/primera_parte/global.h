@@ -7,6 +7,13 @@
 
 extern const int DAYS_IN_MONTH[];
 
+typedef enum data_type_t {
+  TYPE_INT32 = 8,
+  TYPE_FLOAT = 8,
+  TYPE_INT8 = 1,
+  TYPE_DOUBLE = 16
+} data_type_t;
+
 /* DECLARACION DE TIPOS */
 /* ------------------- */
 
@@ -50,15 +57,15 @@ root_t* eq_solver(coeff_t* coeficientes);
 
 int32_t bin2dec(char* binary, bool sign);
 
-void print_reverse_array(void* array, size_t data_type, size_t array_size);
+void print_reverse_array(void* array, data_type_t data_type, size_t array_size);
 
-void max_index(void* array, size_t data_type, size_t array_size);
+int max_index(void* array, data_type_t data_type, size_t array_size);
 
-void min_index(void* array, size_t data_type, size_t array_size);
+int min_index(void* array, data_type_t data_type, size_t array_size);
 
 matriz_t* matrix_sub(matriz_t A, matriz_t B);
 
-int swap(void* elem1, void* elem2, size_t data_type);
+int swap(void* elem1, void* elem2, data_type_t data_type);
 
 int consonantes(char* string);
 
