@@ -384,7 +384,7 @@ void max_index(void *array, size_t data_type, size_t array_size) {
   if (array != NULL && array_size != 0) {
     size_t max = 0;
     int max_idx = 0;
-    int *p = array;
+    unsigned char *p = (unsigned char *)array;
 
     for (size_t i = 0; i < array_size; i++) {
       if (*p > max) {
