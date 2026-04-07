@@ -38,3 +38,5 @@ void sort_list(node_t* head, int (*cmp)(estudiante_t*, estudiante_t*));
 
 void sort_by_ci(node_t* head);
 void sort_by_apellido(node_t* head);
+
+int list_length(node_t *head); 

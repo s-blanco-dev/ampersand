@@ -78,5 +78,6 @@ int main() {
     free(lista); // Liberamos el elemento en cuestión 
 
     printf("FIN DE PRUEBAS.\n");
+
     return 0;
 }

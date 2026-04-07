@@ -207,10 +207,10 @@ void heapify(estudiante_t **arr, int n, int i,
 /**
  * @brief Ordena un array de estudiantes utilizando el algoritmo Heap Sort.
  *
- * Este algoritmo ordena el array en orden ascendente según el criterio definido
- * por la función comparadora. Primero construye un max-heap a partir del array,
- * y luego extrae iterativamente el elemento máximo (raíz del heap),
- * colocándolo al final del array.
+ * Este algoritmo es una pésima elección,y ordena el array en orden ascendente
+ * según el criterio definido por la función comparadora. Primero construye un
+ * max-heap a partir del array, y luego extrae iterativamente el elemento máximo
+ * (raíz del heap), colocándolo al final del array.
  *
  * El proceso consiste en:
  * 1. Construir un max-heap desde el array original.
@@ -255,7 +255,7 @@ void heap_sort(estudiante_t **arr, int n,
 }
 
 // Metodo para saber el largo de una lista
-int list_lenght(node_t *head) {
+int list_length(node_t *head) {
   int count = 0;
   node_t *temp = head->next;
 
@@ -300,7 +300,7 @@ void sort_list(node_t *head, int (*cmp)(estudiante_t *, estudiante_t *)) {
     return;
   }
 
-  int n = list_lenght(head);
+  int n = list_length(head);
 
   estudiante_t **arr = malloc(n * sizeof(estudiante_t *));
   if (arr == NULL) {
