@@ -1,13 +1,11 @@
-#include <stdint.h>
-#include <stddef.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-const int DAYS_IN_MONTH[] = {
-    0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-};
+extern const int DAYS_IN_MONTH[];
 
 /* DECLARACION DE TIPOS */
 /* ------------------- */
@@ -48,7 +46,7 @@ typedef struct matriz_s {
 
 void init_lab();
 
-root_t* eq_solver(coeff_t *coeficientes);
+root_t* eq_solver(coeff_t* coeficientes);
 
 int32_t bin2dec(char* binary, bool sign);
 
@@ -60,25 +58,25 @@ void min_index(void* array, size_t data_type, size_t array_size);
 
 matriz_t* matrix_sub(matriz_t A, matriz_t B);
 
-int swap(void *elem1, void *elem2, size_t data_type);
+int swap(void* elem1, void* elem2, size_t data_type);
 
-int consonantes(char *string);
+int consonantes(char* string);
 
-int vocales(char *string);
+int vocales(char* string);
 
 char* reverse_string(char* string);
 
-int32_t string_length(char *string);
+int32_t string_length(char* string);
 
-int string_copy(char *source, char *destination);
+int string_copy(char* source, char* destination);
 
-int string_words(char *string);
+int string_words(char* string);
 
-int find_in_string(char *haystack, char *needle);
+int find_in_string(char* haystack, char* needle);
 
-void string_to_caps(char *string);
+void string_to_caps(char* string);
 
-void string_to_min(char *string);
+void string_to_min(char* string);
 
 complex_t* sum(complex_t a, complex_t b);
 
