@@ -194,6 +194,28 @@ void print_reverse_array(void *array, size_t data_type, size_t array_size) {
   }
 }
 
+char *reverse_string(char *string){
+  if (string == NULL){
+    return NULL;
+  }
+  int len = 0;
+  while (string[len] != '\0'){
+    len++;
+  }
+  char *reversed = (char *)malloc((len - 1) * sizeof(char));
+  if (reversed == NULL){
+    return NULL;
+  }
+  for (int pp = 0; pp < len; pp++){
+    reversed[pp] = string[len - 1 - pp];
+  }
+  reversed[len] = '\0';
+
+  printf("%s", reversed);
+
+  return reversed;
+}
+
 /**
  * @brief Convierte un string a mayúsculas in-place.
  *
