@@ -1,4 +1,3 @@
-/* IMPLEMENTEN LAS FUNCIONES ACÁ */
 #include "global.h"
 #include <limits.h>
 #include <math.h>
@@ -13,7 +12,7 @@
 const int DAYS_IN_MONTH[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
 void init_lab() {
-  printf("AMPERSAND:\nSantiago Blanco\nFelipe Paladino\nPiero Saucedo\n");
+    printf("AMPERSAND:\nSantiago Blanco\nFelipe Paladino\nPiero Saucedo\n");
 }
 
 /*
@@ -27,55 +26,55 @@ void init_lab() {
  * e imag).
  */
 root_t *eq_solver(coeff_t *coeficientes) {
-  if (coeficientes == NULL) {
+    if (coeficientes == NULL) {
+        return NULL;
+    }
+
+    root_t *result = malloc(sizeof(root_t));
+    if (result == NULL) {
+        return NULL;
+    }
+
+    result->imag1 = 0;
+    result->imag2 = 0;
+    result->complex = false;
+
+    double a, b, c;
+    a = coeficientes->a;
+    b = coeficientes->b;
+    c = coeficientes->c;
+
+    double disc = b * b - (4.0 * a * c);
+
+    if (disc < 0) {
+        double c1 = sqrt(-disc) / (2.0 * a);
+        result->complex = true;
+
+        result->imag1 = c1;
+        result->imag2 = -c1;
+
+        result->real1 = (-b) / (2.0 * a);
+        result->real2 = (-b) / (2.0 * a);
+        return result;
+    }
+
+    if (disc == 0) {
+        double r = (-b / (2.0 * a));
+        result->real1 = r;
+        result->real2 = r;
+        return result;
+    }
+
+    if (disc > 0) {
+        double disc_root = sqrt(disc);
+        double r1 = (-b + disc_root) / (2.0 * a);
+        double r2 = (-b - disc_root) / (2.0 * a);
+        result->real1 = r1;
+        result->real2 = r2;
+        return result;
+    }
+
     return NULL;
-  }
-
-  root_t *result = malloc(sizeof(root_t));
-  if (result == NULL) {
-    return NULL;
-  }
-
-  result->imag1 = 0;
-  result->imag2 = 0;
-  result->complex = false;
-
-  double a, b, c;
-  a = coeficientes->a;
-  b = coeficientes->b;
-  c = coeficientes->c;
-
-  double disc = b * b - (4.0 * a * c);
-
-  if (disc < 0) {
-    double c1 = sqrt(-disc) / (2.0 * a);
-    result->complex = true;
-
-    result->imag1 = c1;
-    result->imag2 = -c1;
-
-    result->real1 = (-b) / (2.0 * a);
-    result->real2 = (-b) / (2.0 * a);
-    return result;
-  }
-
-  if (disc == 0) {
-    double r = (-b / (2.0 * a));
-    result->real1 = r;
-    result->real2 = r;
-    return result;
-  }
-
-  if (disc > 0) {
-    double disc_root = sqrt(disc);
-    double r1 = (-b + disc_root) / (2.0 * a);
-    double r2 = (-b - disc_root) / (2.0 * a);
-    result->real1 = r1;
-    result->real2 = r2;
-    return result;
-  }
-
-  return NULL;
 }
 
 /*
@@ -92,41 +91,42 @@ root_t *eq_solver(coeff_t *coeficientes) {
  * NULL si no se pudo completar la operación.
  */
 matriz_t *matrix_sub(matriz_t A, matriz_t B) {
-  if (A.rows != B.rows || A.cols != B.cols) {
-    return NULL;
-  }
+    if (A.rows != B.rows || A.cols != B.cols) {
+        return NULL;
+    }
 
-  matriz_t *C = malloc(sizeof(matriz_t));
-  if (C == NULL) {
-    return NULL;
-  }
+    matriz_t *C = malloc(sizeof(matriz_t));
+    if (C == NULL) {
+        return NULL;
+    }
 
-  C->cols = A.cols;
-  C->rows = A.rows;
+    C->cols = A.cols;
+    C->rows = A.rows;
 
-  C->data = (int16_t **)malloc(C->rows * C->cols * sizeof(int16_t));
-  if (C->data == NULL) {
-    free(C);
-    return NULL;
-  }
+    C->data = (int16_t **)malloc(C->rows * C->cols * sizeof(int16_t));
+    if (C->data == NULL) {
+        free(C);
+        return NULL;
+    }
 
-  // SOLUCION EXTRAÑA
-  int16_t *dataA = (int16_t *)A.data;
-  int16_t *dataB = (int16_t *)B.data;
-  int16_t *dataC = (int16_t *)C->data;
+    // SOLUCION EXTRAÑA
+    int16_t *dataA = (int16_t *)A.data;
+    int16_t *dataB = (int16_t *)B.data;
+    int16_t *dataC = (int16_t *)C->data;
 
-  // Esta forma era la correcta, pero el testbench nos mató la ilusión
-  // for (int i = 0; i < A.rows; i++) {
-  //   for (int j = 0; j < A.cols; j++) {
-  //     C->data[i][j] = A.data[i][j] - B.data[i][j];
-  //   }
-  // }
-  //
-  for (int i = 0; i < A.rows * A.cols; i++) {
-    dataC[i] = dataA[i] - dataB[i]; // ahora tratamos la matri como array plano feo
-  }
+    // Esta forma era la correcta, pero el testbench nos mató la ilusión
+    // for (int i = 0; i < A.rows; i++) {
+    //   for (int j = 0; j < A.cols; j++) {
+    //     C->data[i][j] = A.data[i][j] - B.data[i][j];
+    //   }
+    // }
+    //
+    for (int i = 0; i < A.rows * A.cols; i++) {
+        dataC[i] =
+            dataA[i] - dataB[i]; // ahora tratamos la matri como array plano feo
+    }
 
-  return C;
+    return C;
 }
 
 /*
@@ -142,15 +142,15 @@ matriz_t *matrix_sub(matriz_t A, matriz_t B) {
  * NULL si hay un error asignando memoria
  */
 complex_t *sum(complex_t a, complex_t b) {
-  complex_t *result = malloc(sizeof(complex_t));
-  if (result == NULL) {
-    return NULL;
-  }
+    complex_t *result = malloc(sizeof(complex_t));
+    if (result == NULL) {
+        return NULL;
+    }
 
-  result->imag = a.imag + b.imag;
-  result->real = a.real + b.real;
+    result->imag = a.imag + b.imag;
+    result->real = a.real + b.real;
 
-  return result;
+    return result;
 }
 
 /*
@@ -165,15 +165,15 @@ complex_t *sum(complex_t a, complex_t b) {
  * parte real e imaginaria. NULL si hay un error asignando memoria
  */
 complex_t *prod(complex_t a, complex_t b) {
-  complex_t *result = malloc(sizeof(complex_t));
-  if (result == NULL) {
-    return NULL;
-  }
+    complex_t *result = malloc(sizeof(complex_t));
+    if (result == NULL) {
+        return NULL;
+    }
 
-  result->real = (a.real * b.real) - (a.imag * b.imag);
-  result->imag = (a.real * b.imag) + (a.imag * b.real);
+    result->real = (a.real * b.real) - (a.imag * b.imag);
+    result->imag = (a.real * b.imag) + (a.imag * b.real);
 
-  return result;
+    return result;
 }
 
 /*
@@ -190,51 +190,53 @@ complex_t *prod(complex_t a, complex_t b) {
  */
 void print_reverse_array(void *array, data_type_t data_type,
                          size_t array_size) {
-  if (array == NULL || array_size == 0 || data_type == 0) {
-    return;
-  }
+    if (array == NULL || array_size == 0 || data_type == 0) {
+        return;
+    }
 
-  unsigned char *arr_ptr = (unsigned char *)array;
+    unsigned char *arr_ptr = (unsigned char *)array;
 
-  for (size_t i = array_size; i > 0; i--) {
-    unsigned char *curr = arr_ptr + ((i - 1) * data_type);
-    printf("%02X\n", *curr);
-  }
+    for (size_t i = array_size; i > 0; i--) {
+        unsigned char *curr = arr_ptr + ((i - 1) * data_type);
+        printf("%02X\n", *curr);
+    }
 }
 
-/* @brief imprime y retorna el string proporcionado en orden inverso usando un puntero a ese string.
- *  
- *  Recorre el string original para definir la longitud del mismo (len).
- *  Reserva un espacio en memoria usando malloc, para guardar un array "reversed" que sera el string dado vuelta.
+/* @brief imprime y retorna el string proporcionado en orden inverso usando un
+ * puntero a ese string.
  *
- *  Va llenando "reversed" con los caracteres de "string" de derecha a izquierda, hasta completarlo.
- *  Finalmente, se le añade el caracter '\0'.
+ *  Recorre el string original para definir la longitud del mismo (len).
+ *  Reserva un espacio en memoria usando malloc, para guardar un array
+ * "reversed" que sera el string dado vuelta.
+ *
+ *  Va llenando "reversed" con los caracteres de "string" de derecha a
+ * izquierda, hasta completarlo. Finalmente, se le añade el caracter '\0'.
  *
  * @param char *string
  * @return reversed
  *
  * */
-char *reverse_string(char *string){
-  if (string == NULL){
-    return NULL;
-  }
-  int len = 0;
-  while (string[len] != '\0'){
-    len++;
-  }
-  
-  char *reversed = (char *)malloc((len + 1) * sizeof(char));
-  if (reversed == NULL){
-    return NULL;
-  }
-  for (int pp = 0; pp < len; pp++){
-    reversed[pp] = string[len - 1 - pp];
-  }
-  reversed[len] = '\0';
+char *reverse_string(char *string) {
+    if (string == NULL) {
+        return NULL;
+    }
+    int len = 0;
+    while (string[len] != '\0') {
+        len++;
+    }
 
-  printf("%s", reversed);
+    char *reversed = (char *)malloc((len + 1) * sizeof(char));
+    if (reversed == NULL) {
+        return NULL;
+    }
+    for (int pp = 0; pp < len; pp++) {
+        reversed[pp] = string[len - 1 - pp];
+    }
+    reversed[len] = '\0';
 
-  return reversed;
+    printf("%s", reversed);
+
+    return reversed;
 }
 
 /**
@@ -247,15 +249,15 @@ char *reverse_string(char *string){
  * @return void
  */
 void string_to_caps(char *string) {
-  if (string == NULL)
-    return;
+    if (string == NULL)
+        return;
 
-  while (*string != '\0') {
-    if (*string >= 'a' && *string <= 'z') {
-      *string = *string - 32;
+    while (*string != '\0') {
+        if (*string >= 'a' && *string <= 'z') {
+            *string = *string - 32;
+        }
+        string++;
     }
-    string++;
-  }
 }
 
 /**
@@ -268,15 +270,15 @@ void string_to_caps(char *string) {
  * @return void
  */
 void string_to_min(char *string) {
-  if (string == NULL)
-    return;
+    if (string == NULL)
+        return;
 
-  while (*string != '\0') {
-    if (*string >= 'A' && *string <= 'Z') {
-      *string = *string + 32;
+    while (*string != '\0') {
+        if (*string >= 'A' && *string <= 'Z') {
+            *string = *string + 32;
+        }
+        string++;
     }
-    string++;
-  }
 }
 
 /**
@@ -288,16 +290,16 @@ void string_to_min(char *string) {
  * @return int32_t Longitud del string, o -1 si el puntero es NULL.
  */
 int32_t string_length(char *string) {
-  if (string == NULL) {
-    return -1;
-  }
+    if (string == NULL) {
+        return -1;
+    }
 
-  int32_t count = 0;
-  while (string[count] != '\0') {
-    count++;
-  }
+    int32_t count = 0;
+    while (string[count] != '\0') {
+        count++;
+    }
 
-  return count;
+    return count;
 }
 
 /**
@@ -310,22 +312,22 @@ int32_t string_length(char *string) {
  * @return int32_t Cantidad de palabras, o -1 si el puntero es NULL.
  */
 int32_t string_words(char *string) {
-  if (string == NULL) {
-    return -1;
-  }
-
-  int32_t palabras = 0;
-  int pp = 0;
-
-  while (string[pp] != '\0') {
-    if (string[pp] != ' ' && (pp == 0 || string[pp - 1] == ' ')) {
-      palabras++;
+    if (string == NULL) {
+        return -1;
     }
 
-    pp++;
-  }
+    int32_t palabras = 0;
+    int pp = 0;
 
-  return palabras;
+    while (string[pp] != '\0') {
+        if (string[pp] != ' ' && (pp == 0 || string[pp - 1] == ' ')) {
+            palabras++;
+        }
+
+        pp++;
+    }
+
+    return palabras;
 }
 
 /**
@@ -345,23 +347,23 @@ int32_t string_words(char *string) {
  *         o -1 si no se encuentra o si alguno de los punteros es NULL.
  */
 int find_in_string(char *haystack, char *needle) {
-  if (haystack == NULL || needle == NULL) {
+    if (haystack == NULL || needle == NULL) {
+        return -1;
+    }
+
+    for (int i = 0; haystack[i] != '\0'; i++) {
+        int k = 0;
+
+        while (needle[k] != '\0' && haystack[i + k] == needle[k]) {
+            k++;
+        }
+
+        if (needle[k] == '\0') {
+            return i;
+        }
+    }
+
     return -1;
-  }
-
-  for (int i = 0; haystack[i] != '\0'; i++) {
-    int k = 0;
-
-    while (needle[k] != '\0' && haystack[i + k] == needle[k]) {
-      k++;
-    }
-
-    if (needle[k] == '\0') {
-      return i;
-    }
-  }
-
-  return -1;
 }
 
 /**
@@ -376,83 +378,163 @@ int find_in_string(char *haystack, char *needle) {
  * @return int Retorna 0 si tuvo éxito, o -1 si alguno de los punteros es NULL.
  */
 int swap(void *elem1, void *elem2, data_type_t data_type) {
-  if (elem1 == NULL || elem2 == NULL) {
-    return -1;
-  }
+    if (elem1 == NULL || elem2 == NULL) {
+        return -1;
+    }
 
-  char *a = (char *)elem1;
-  char *b = (char *)elem2;
+    char *a = (char *)elem1;
+    char *b = (char *)elem2;
 
-  for (size_t pp = 0; pp < data_type; pp++) {
-    char temp = a[pp];
-    a[pp] = b[pp];
-    b[pp] = temp;
-  }
+    for (size_t pp = 0; pp < data_type; pp++) {
+        char temp = a[pp];
+        a[pp] = b[pp];
+        b[pp] = temp;
+    }
 
-  return 0;
+    return 0;
 }
 
-/*
- * @brief Encuentra e imprime el valor máximo y su índice en un array genérico.
+/**
+ * @brief Copia un string origen a un destino.
  *
- * Recorre el array genérico asumiendo que los elementos son de tipo int.
- * Compara cada elemento con el valor máximo actual y guarda su posición.
- * Requiere que los datos sean interpretables como enteros.
+ * Copia carácter por carácter desde el string fuente al destino,
+ * incluyendo el caracter nulo al final.
  *
- * @param array      Array genérico (puntero al inicio del array)
- * @param data_type  Tamaño en bytes de cada elemento
+ * @param source Puntero al string origen a copiar
+ * @param destination Puntero al buffer destino donde se copiará el string
+ * @return int Retorna 0 si la copia fue exitosa, -1 si alguno de los punteros
+ * es NULL
+ */
+int string_copy(char *source, char *destination) {
+    if (source != NULL && destination != NULL) {
+        int i = 0;
+
+        while (source[i] != '\0') {
+            destination[i] = source[i];
+            i++;
+        }
+
+        destination[++i] = '\0';
+        return 0;
+    }
+
+    return -1;
+}
+
+/**
+ * @brief Encuentra el índice del valor máximo en un array genérico.
+ *
+ * Recorre el array comparando valores según el tipo de dato especificado
+ * y retorna la posición donde se encuentra el valor máximo.
+ * Imprime el valor máximo y su índice por consola.
+ *
+ * @param array Puntero al array genérico
+ * @param data_type Tipo de dato almacenado en el array
  * @param array_size Cantidad de elementos en el array
- * @return int  Si falló, retorna -1, sino retorna el max
+ * @return int Índice del valor máximo, o -1 si hay error
  */
 int max_index(void *array, data_type_t data_type, size_t array_size) {
-  if (array != NULL && array_size != 0) {
-    size_t max = 0;
-    // int max_idx = 0;
+    if (array == NULL || array_size == 0)
+        return -1;
+
     unsigned char *p = (unsigned char *)array;
+    size_t step = data_type_size(data_type);
+    if (step == 0)
+        return -1;
+
+    double max = 0;
+    int max_idx = 0;
+    int first = 1;
 
     for (size_t i = 0; i < array_size; i++) {
-      if (*p > max) {
-        max = *p;
-        // max_idx = i;
-      }
-      p += data_type;
+        double val;
+
+        switch (data_type) {
+        case TYPE_INT8:
+            val = *(int8_t *)p;
+            break;
+        case TYPE_INT32:
+            val = *(int32_t *)p;
+            break;
+        case TYPE_FLOAT:
+            val = *(float *)p;
+            break;
+        case TYPE_DOUBLE:
+            val = *(double *)p;
+            break;
+        default:
+            return -1;
+        }
+
+        if (first || val > max) {
+            max = val;
+            max_idx = i;
+            first = 0;
+        }
+
+        p += step;
     }
-    return max;
-  }
-  return -1;
+
+    printf("Max value %f at index %d\n", max, max_idx);
+    return max_idx;
 }
 
-/*
- * @brief Encuentra e imprime el valor mínimo y su índice en un array genérico.
+/**
+ * @brief Encuentra el índice del valor mínimo en un array genérico.
  *
- * Recorre el array genérico asumiendo que los elementos son de tipo int.
- * Compara cada elemento con el valor mínimo actual y guarda su posición.
- * Inicializa el mínimo con SIZE_MAX para asegurar que cualquier valor sea
- * menor. Requiere que los datos sean interpretables como enteros.
+ * Recorre el array comparando valores según el tipo de dato especificado
+ * y retorna la posición donde se encuentra el valor mínimo.
+ * Imprime el valor mínimo y su índice por consola.
  *
- * @param array      Array genérico (puntero al inicio del array)
- * @param data_type  Tamaño en bytes de cada elemento
+ * @param array Puntero al array genérico
+ * @param data_type Tipo de dato almacenado en el array
  * @param array_size Cantidad de elementos en el array
- * @return void
+ * @return int Índice del valor mínimo, o -1 si hay error
  */
 int min_index(void *array, data_type_t data_type, size_t array_size) {
-  if (array != NULL && array_size != 0) {
-    size_t min = SIZE_MAX;
-    // int min_idx = 0;
+    if (array == NULL || array_size == 0)
+        return -1;
+
     unsigned char *p = (unsigned char *)array;
+    size_t step = data_type_size(data_type);
+    if (step == 0)
+        return -1;
+
+    double min = 0;
+    int min_idx = 0;
+    int first = 1;
 
     for (size_t i = 0; i < array_size; i++) {
-      if (*p < min) {
-        min = *p;
-        // min_idx = i;
-      }
+        double val;
 
-      p += data_type;
+        switch (data_type) {
+        case TYPE_INT8:
+            val = *(int8_t *)p;
+            break;
+        case TYPE_INT32:
+            val = *(int32_t *)p;
+            break;
+        case TYPE_FLOAT:
+            val = *(float *)p;
+            break;
+        case TYPE_DOUBLE:
+            val = *(double *)p;
+            break;
+        default:
+            return -1;
+        }
+
+        if (first || val < min) {
+            min = val;
+            min_idx = i;
+            first = 0;
+        }
+
+        p += step;
     }
 
-    return min;
-  }
-  return -1;
+    printf("Min value %f at index %d\n", min, min_idx);
+    return min_idx;
 }
 
 /*
@@ -467,25 +549,25 @@ int min_index(void *array, data_type_t data_type, size_t array_size) {
  * @return int32_t Valor decimal resultante de la conversión
  */
 int32_t bin2dec(char *binary, bool sign) {
-  int base = 2;
-  int exp = strlen(binary) - 1;
-  int number = 0;
-  char *p = binary;
+    int base = 2;
+    int exp = strlen(binary) - 1;
+    int number = 0;
+    char *p = binary;
 
-  int is_negative = sign && (*p == '1');
+    int is_negative = sign && (*p == '1');
 
-  while (*p != '\0') {
-    int n = *p - '0';
-    number += n * (int)pow(base, exp);
-    --exp;
-    p++;
-  }
+    while (*p != '\0') {
+        int n = *p - '0';
+        number += n * (int)pow(base, exp);
+        --exp;
+        p++;
+    }
 
-  if (is_negative) {
-    number -= (int)pow(base, strlen(binary));
-  }
+    if (is_negative) {
+        number -= (int)pow(base, strlen(binary));
+    }
 
-  return number;
+    return number;
 }
 
 /*
@@ -499,22 +581,22 @@ int32_t bin2dec(char *binary, bool sign) {
  * @return int Cantidad de vocales en el string
  */
 int vocales(char *string) {
-  int count = 0;
-  char vocals[] = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
-  int len = sizeof(vocals) / sizeof(vocals[0]);
-  char *p = &string[0];
+    int count = 0;
+    char vocals[] = {'a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U'};
+    int len = sizeof(vocals) / sizeof(vocals[0]);
+    char *p = &string[0];
 
-  while (*p != '\0') {
-    for (int i = 0; i < len; i++) {
-      if (*p == vocals[i]) {
-        count++;
-        break;
-      }
+    while (*p != '\0') {
+        for (int i = 0; i < len; i++) {
+            if (*p == vocals[i]) {
+                count++;
+                break;
+            }
+        }
+        ++p;
     }
-    ++p;
-  }
 
-  return count;
+    return count;
 }
 
 /*
@@ -528,20 +610,20 @@ int vocales(char *string) {
  * @return int Cantidad de consonantes en el string
  */
 int consonantes(char *string) {
-  int count = 0;
-  char *p = &string[0];
+    int count = 0;
+    char *p = &string[0];
 
-  while (*p != '\0') {
-    if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z')) {
-      if (*p != 'a' && *p != 'e' && *p != 'i' && *p != 'o' && *p != 'u' &&
-          *p != 'A' && *p != 'E' && *p != 'I' && *p != 'O' && *p != 'U') {
-        count++;
-      }
+    while (*p != '\0') {
+        if (('a' <= *p && *p <= 'z') || ('A' <= *p && *p <= 'Z')) {
+            if (*p != 'a' && *p != 'e' && *p != 'i' && *p != 'o' && *p != 'u' &&
+                *p != 'A' && *p != 'E' && *p != 'I' && *p != 'O' && *p != 'U') {
+                count++;
+            }
+        }
+        ++p;
     }
-    ++p;
-  }
 
-  return count;
+    return count;
 }
 
 /*
@@ -555,7 +637,7 @@ int consonantes(char *string) {
  * @return int Diferencia en días entre ambas fechas
  */
 int days_left(date_t start, date_t finish) {
-  return (int)(date_to_days(finish) - date_to_days(start));
+    return (int)(date_to_days(finish) - date_to_days(start));
 }
 
 /* DEFINO FUNCIONES DE IMPRESION DE TIPOS */
@@ -572,16 +654,16 @@ int days_left(date_t start, date_t finish) {
  * @return void
  */
 void print_matriz_t(matriz_t *matriz) {
-  if (matriz == NULL) {
-    return;
-  }
-
-  for (int i = 0; i < matriz->rows; i++) {
-    for (int j = 0; j < matriz->cols; j++) {
-      printf("%d\t", matriz->data[i][j]);
+    if (matriz == NULL) {
+        return;
     }
-    printf("\n");
-  }
+
+    for (int i = 0; i < matriz->rows; i++) {
+        for (int j = 0; j < matriz->cols; j++) {
+            printf("%d\t", matriz->data[i][j]);
+        }
+        printf("\n");
+    }
 }
 
 /*
@@ -593,12 +675,12 @@ void print_matriz_t(matriz_t *matriz) {
  * @return void
  */
 void print_coeff_t(coeff_t *coeficientes) {
-  if (coeficientes == NULL) {
-    return;
-  }
+    if (coeficientes == NULL) {
+        return;
+    }
 
-  printf("Coeficientes:\na: %d\nb: %d\nc: %d\n", coeficientes->a,
-         coeficientes->b, coeficientes->c);
+    printf("Coeficientes:\na: %d\nb: %d\nc: %d\n", coeficientes->a,
+           coeficientes->b, coeficientes->c);
 }
 
 /*
@@ -611,12 +693,12 @@ void print_coeff_t(coeff_t *coeficientes) {
  * @return void
  */
 void print_complex_t(complex_t *complex) {
-  if (complex == NULL) {
-    return;
-  }
+    if (complex == NULL) {
+        return;
+    }
 
-  printf("%f %c %fi\n", complex->real, complex->imag < 0 ? '-' : '+',
-         complex->imag);
+    printf("%f %c %fi\n", complex->real, complex->imag < 0 ? '-' : '+',
+           complex->imag);
 }
 
 /*
@@ -628,11 +710,11 @@ void print_complex_t(complex_t *complex) {
  * @return void
  */
 void print_date_t(date_t *fecha) {
-  if (fecha == NULL) {
-    return;
-  }
+    if (fecha == NULL) {
+        return;
+    }
 
-  printf("%d / %d / %d\n", fecha->day, fecha->month, fecha->year);
+    printf("%d / %d / %d\n", fecha->day, fecha->month, fecha->year);
 }
 
 /*
@@ -645,22 +727,22 @@ void print_date_t(date_t *fecha) {
  * @return void
  */
 void print_root_t(root_t *roots) {
-  if (roots == NULL) {
-    return;
-  }
+    if (roots == NULL) {
+        return;
+    }
 
-  if (roots->complex) {
-    complex_t r1 = {roots->real1, roots->imag1};
-    complex_t r2 = {roots->real2, roots->imag2};
+    if (roots->complex) {
+        complex_t r1 = {roots->real1, roots->imag1};
+        complex_t r2 = {roots->real2, roots->imag2};
 
-    printf("R1: ");
-    print_complex_t(&r1);
-    printf("R2: ");
-    print_complex_t(&r2);
-    return;
-  }
+        printf("R1: ");
+        print_complex_t(&r1);
+        printf("R2: ");
+        print_complex_t(&r2);
+        return;
+    }
 
-  printf("R1: %f\n R2: %f\n", roots->real1, roots->real2);
+    printf("R1: %f\n R2: %f\n", roots->real1, roots->real2);
 }
 
 /* FUNCIONES AUXILIARES */
@@ -676,35 +758,86 @@ void print_root_t(root_t *roots) {
  * @return void
  */
 void free_matrix(matriz_t *matriz) {
-  if (matriz == NULL || matriz->data == NULL) {
-    return;
-  }
+    if (matriz == NULL || matriz->data == NULL) {
+        return;
+    }
 
-  for (int i = 0; i < matriz->rows; i++) {
-    free(matriz->data[i]);
-  }
+    for (int i = 0; i < matriz->rows; i++) {
+        free(matriz->data[i]);
+    }
 
-  free(matriz->data);
+    free(matriz->data);
 }
 
+/**
+ * @brief Verifica si un año es bisiesto.
+ *
+ * Un año es bisiesto si es divisible por 4, pero no por 100,
+ * a menos que también sea divisible por 400.
+ *
+ * @param year Año a verificar (formato YYYY)
+ * @return int Retorna 1 si el año es bisiesto, 0 en caso contrario
+ */
 int is_leap(int16_t year) {
-  return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
 }
 
+/**
+ * @brief Calcula la cantidad de años bisiestos antes de un año dado.
+ *
+ * Cuenta todos los años bisiestos desde el año 1 hasta el año anterior
+ * al especificado.
+ *
+ * @param y Año límite (excluyente)
+ * @return long Cantidad de años bisiestos antes del año y
+ */
 long leap_years_before(int16_t y) {
-  y--;
-  return (y / 4) - (y / 100) + (y / 400);
+    y--;
+    return (y / 4) - (y / 100) + (y / 400);
 }
 
+/**
+ * @brief Convierte una fecha a su representación en días desde el año 1.
+ *
+ * Calcula el número total de días transcurridos desde el 1 de enero del
+ * año 1 hasta la fecha especificada, considerando años bisiestos.
+ *
+ * @param d Estructura date_t con la fecha a convertir
+ * @return long Número total de días desde el año 1 hasta la fecha
+ */
 long date_to_days(date_t d) {
-  long days = (long)(d.year - 1) * 365 + leap_years_before(d.year);
+    long days = (long)(d.year - 1) * 365 + leap_years_before(d.year);
 
-  for (int m = 1; m < d.month; m++) {
-    days += DAYS_IN_MONTH[m];
-    if (m == 2 && is_leap(d.year))
-      days++;
-  }
+    for (int m = 1; m < d.month; m++) {
+        days += DAYS_IN_MONTH[m];
+        if (m == 2 && is_leap(d.year))
+            days++;
+    }
 
-  days += d.day;
-  return days;
+    days += d.day;
+    return days;
+}
+
+/**
+ * @brief Obtiene el tamaño en bytes de un data_type.
+ *
+ * Retorna el tamaño en memoria que ocupa cada tipo de dato
+ * definido en el enum data_type_t.
+ *
+ * @param dt Tipo de dato (TYPE_INT8, TYPE_INT32, TYPE_FLOAT o TYPE_DOUBLE)
+ * @return size_t Tamaño en bytes del tipo de dato, o 1 si el tipo no es válido
+ */
+size_t data_type_size(data_type_t dt) {
+    switch (dt) {
+    case TYPE_INT8:
+        return 1;
+    case TYPE_INT32:
+        return 4;
+    case TYPE_FLOAT:
+        return 4;
+    case TYPE_DOUBLE:
+        return 8;
+    default:
+        return 1;
+    }
 }
