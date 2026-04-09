@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* ============================================================
  * TESTS (mientras no tengamos la test-suite)
@@ -58,31 +59,24 @@ void test_reverse_array(void) {
 void test_matrix_sub(void) {
     printf("\n=== TEST 4: Resta de Matrices ===\n");
 
-    matriz_t A, B;
-    A.rows = B.rows = 2;
-    A.cols = B.cols = 2;
+    int16_t *pa = malloc(4 * sizeof(int16_t));
+    int16_t *pb = malloc(4 * sizeof(int16_t));
 
-    A.data = malloc(2 * sizeof(int16_t *));
-    B.data = malloc(2 * sizeof(int16_t *));
-    if (!A.data || !B.data) {
-        printf("Error: reventó malloc\n");
+    if (pa == NULL || pb == NULL) {
+        printf("Reventó malloc\n");
         return;
     }
+    pa[0] = 5;
+    pa[1] = 3;
+    pa[2] = 1;
+    pa[3] = 2;
+    pb[0] = 1;
+    pb[1] = 1;
+    pb[2] = 1;
+    pb[3] = 1;
 
-    for (int i = 0; i < 2; i++) {
-        A.data[i] = malloc(2 * sizeof(int16_t));
-        B.data[i] = malloc(2 * sizeof(int16_t));
-
-        if (!A.data[i] || !B.data[i]) {
-            printf("Error: reventó malloc\n");
-            return;
-        }
-
-        for (int j = 0; j < 2; j++) {
-            A.data[i][j] = 10;
-            B.data[i][j] = 3;
-        }
-    }
+    matriz_t A = {(int16_t **)pa, 2, 2};
+    matriz_t B = {(int16_t **)pb, 2, 2};
 
     matriz_t *res = matrix_sub(A, B);
     if (!res) {
@@ -91,9 +85,15 @@ void test_matrix_sub(void) {
         print_matriz_t(res);
     }
 
-    free_matrix(&A);
-    free_matrix(&B);
-    free_matrix(res);
+    // esto funcionaba hasta que llegó el testbench impresentable y rompió todo
+    // free_matrix(&A);
+    // free_matrix(&B);
+    // free_matrix(res);
+
+    free(res->data);
+    free(res);
+    free(pa);
+    free(pb);
 }
 
 void test_string_ops(void) {

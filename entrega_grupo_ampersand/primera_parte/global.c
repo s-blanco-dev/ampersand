@@ -109,7 +109,7 @@ matriz_t *matrix_sub(matriz_t A, matriz_t B) {
         return NULL;
     }
 
-    // SOLUCION EXTRAÑA
+    // SOLUCION FEA
     int16_t *dataA = (int16_t *)A.data;
     int16_t *dataB = (int16_t *)B.data;
     int16_t *dataC = (int16_t *)C->data;
@@ -658,11 +658,19 @@ void print_matriz_t(matriz_t *matriz) {
         return;
     }
 
-    for (int i = 0; i < matriz->rows; i++) {
-        for (int j = 0; j < matriz->cols; j++) {
-            printf("%d\t", matriz->data[i][j]);
-        }
-        printf("\n");
+    // Testbench desgraciado rompió todo
+    // for (int i = 0; i < matriz->rows; i++) {
+    //     for (int j = 0; j < matriz->cols; j++) {
+    //         printf("%d\t", matriz->data[i][j]);
+    //     }
+    //     printf("\n");
+    // }
+
+    int16_t *data = (int16_t *)matriz->data;
+
+    // imprime plano y feo
+    for (int i = 0; i < matriz->rows * matriz->cols; i++) {
+        printf("%d\t", data[i]);
     }
 }
 
