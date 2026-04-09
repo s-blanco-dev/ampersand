@@ -6,12 +6,12 @@
 #include <string.h>
 
 void print_student(estudiante_t *student) {
-  if (student == NULL) {
-    return;
-  }
+    if (student == NULL) {
+        return;
+    }
 
-  printf("%s, %s\nCI: %d\nGrado: %d\nPromedio: %f\n", student->apellido,
-         student->nombre, student->ci, student->grado, student->promedio);
+    printf("%s, %s\nCI: %d\nGrado: %d\nPromedio: %f\n", student->apellido,
+           student->nombre, student->ci, student->grado, student->promedio);
 }
 
 /*
@@ -24,66 +24,69 @@ void print_student(estudiante_t *student) {
  * @return node_t*  El puntero al nodo inicial de la lista
  * */
 node_t *initialize_list() {
-  node_t *choclo = malloc(sizeof(node_t));
-  // Mi alma aguarda al Señor, más que el centinela la aurora
+    node_t *choclo = malloc(sizeof(node_t));
+    // Mi alma aguarda al Señor, más que el centinela la aurora
 
-  if (choclo == NULL) {
-    return NULL;
-  }
+    if (choclo == NULL) {
+        return NULL;
+    }
 
-  choclo->estudiante = NULL;
-  choclo->next = NULL;
-  return choclo;
+    choclo->estudiante = NULL;
+    choclo->next = NULL;
+    return choclo;
 }
 
 bool insert_student(node_t *head, estudiante_t *student) {
-  node_t *temp = head;
-  node_t *newNode = malloc(sizeof(node_t));
-  newNode->estudiante = student;
-  newNode->next = NULL;
+    node_t *temp = head;
+    node_t *newNode = malloc(sizeof(node_t));
+    newNode->estudiante = student;
+    newNode->next = NULL;
 
-  if (newNode == NULL) {
-    return false;
-  }
+    if (newNode == NULL) {
+        return false;
+    }
 
-  while (temp->next != NULL) {
-    temp = temp->next;
-  }
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
 
-  temp->next = newNode;
-  return true;
+    temp->next = newNode;
+    return true;
 }
 
 bool remove_student(node_t *head, uint32_t ci) {
-  node_t *temp = head;
+    node_t *temp = head;
 
-  while (temp->next != NULL) {
-    if (temp->next->estudiante->ci == ci) {
-      node_t *target = temp->next;
-      temp->next = target->next;
-      free(target->estudiante); // borro todo
-      free(target);
-      return true;
+    while (temp->next != NULL) {
+        if (temp->next->estudiante->ci == ci) {
+            node_t *target = temp->next;
+            temp->next = target->next;
+            free(target->estudiante); // borro todo
+            free(target);
+            return true;
+        }
+
+        temp = temp->next;
     }
-    temp = temp->next;
-  }
 
-  return false;
+    return false;
 }
 
 void print_list(node_t *head) {
-  if (head == NULL) {
-    return;
-  }
+    if (head == NULL) {
+        return;
+    }
 
-  node_t *temp = head->next;
-  int i = 0;
-  while (temp != NULL) {
-    printf("%d | CI: %d -> ", i, temp->estudiante->ci);
-    i++;
-    temp = temp->next;
-  }
-  printf("NULL \n");
+    node_t *temp = head->next;
+    int i = 0;
+
+    while (temp != NULL) {
+        printf("%d | CI: %d -> ", i, temp->estudiante->ci);
+        i++;
+        temp = temp->next;
+    }
+
+    printf("NULL \n");
 }
 
 /*
@@ -104,53 +107,55 @@ void print_list(node_t *head) {
  * */
 estudiante_t *search_student(node_t *head, bool tipo, uint32_t ci, char *nombre,
                              char *apellido) {
-  node_t *temp = head->next;
+    node_t *temp = head->next;
 
-  while (temp != NULL) {
-    if (tipo == true) {
-      // tipo de búsqueda por ci
-      if (temp->estudiante->ci == ci) {
-        return temp->estudiante;
-      }
-    } else {
-      // tipo de búsqueda por nombre y apellido
-      if (strcmp(temp->estudiante->nombre, nombre) == 0 &&
-          strcmp(temp->estudiante->apellido, apellido) == 0) {
-        return temp->estudiante;
-      }
+    while (temp != NULL) {
+        if (tipo == true) {
+            // tipo de búsqueda por ci
+            if (temp->estudiante->ci == ci) {
+                return temp->estudiante;
+            }
+        } else {
+            // tipo de búsqueda por nombre y apellido
+            if (strcmp(temp->estudiante->nombre, nombre) == 0 &&
+                strcmp(temp->estudiante->apellido, apellido) == 0) {
+                return temp->estudiante;
+            }
+        }
+        temp = temp->next;
     }
-    temp = temp->next;
-  }
 
-  return NULL; // el estudiante no existe
+    return NULL; // el estudiante no existe
 }
 
 int compare_by_ci(estudiante_t *a, estudiante_t *b) {
-  if (a->ci < b->ci)
-    return -1;
-  if (a->ci > b->ci)
-    return 1;
-  return 0;
+    if (a->ci < b->ci)
+        return -1;
+    if (a->ci > b->ci)
+        return 1;
+    return 0;
 }
 
 int compare_by_apellido(estudiante_t *a, estudiante_t *b) {
-  // Inicialmente comparo por el apellido de los pupilos:
-  int compare = strcmp(a->apellido, b->apellido);
-  if (compare != 0) {
-    return compare;
-    // Si llegan a tener el mismo apellido, comparamos por sus nombres:
-    compare = strcmp(a->nombre, b->nombre);
+    // Inicialmente comparo por el apellido de los pupilos:
+    int compare = strcmp(a->apellido, b->apellido);
     if (compare != 0) {
-      return compare;
+        return compare;
+        // Si llegan a tener el mismo apellido, comparamos por sus nombres:
+        compare = strcmp(a->nombre, b->nombre);
+        if (compare != 0) {
+            return compare;
+        }
+
+        // Si llegaran a apellidarse y llamarse igual, ejemplo: "Santiago
+        // Blanco", comparo finalmente por cedula:
+        if (a->ci < b->ci)
+            return -1;
+
+        if (a->ci > b->ci)
+            return 1;
     }
-    // Si llegaran a apellidarse y llamarse igual, ejemplo: "Santiago Blanco",
-    // comparo finalmente por cedula:
-    if (a->ci < b->ci)
-      return -1;
-    if (a->ci > b->ci)
-      return 1;
-  }
-  return 0;
+    return 0;
 }
 
 /**
@@ -179,29 +184,30 @@ int compare_by_apellido(estudiante_t *a, estudiante_t *b) {
 void heapify(estudiante_t **arr, int n, int i,
              int (*cmp)(estudiante_t *, estudiante_t *)) {
 
-  // inicializar el mas grande como root
-  int largest = i;
-  // hijo izquierdo (left child)
-  int left = 2 * i + 1;
-  // hijo derecho (right child)
-  int right = 2 * i + 2;
+    // inicializar el mas grande como root
+    int largest = i;
+    // hijo izquierdo (left child)
+    int left = 2 * i + 1;
+    // hijo derecho (right child)
+    int right = 2 * i + 2;
 
-  // "if left child is larger than root: modify this":
-  if (left < n && cmp(arr[left], arr[largest]) > 0) {
-    largest = left;
-  }
-  if (right < n && cmp(arr[right], arr[largest]) > 0) {
-    largest = right;
-  }
-  // si el mas grande no es root:
-  if (largest != i) {
-    estudiante_t *temp = arr[i];
-    arr[i] = arr[largest];
-    arr[largest] = temp;
+    // "if left child is larger than root: modify this":
+    if (left < n && cmp(arr[left], arr[largest]) > 0) {
+        largest = left;
+    }
+    if (right < n && cmp(arr[right], arr[largest]) > 0) {
+        largest = right;
+    }
 
-    // heapify recursivo:
-    heapify(arr, n, largest, cmp);
-  }
+    // si el mas grande no es root:
+    if (largest != i) {
+        estudiante_t *temp = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = temp;
+
+        // heapify recursivo:
+        heapify(arr, n, largest, cmp);
+    }
 }
 
 /**
@@ -235,35 +241,37 @@ void heapify(estudiante_t **arr, int n, int i,
  */
 void heap_sort(estudiante_t **arr, int n,
                int (*cmp)(estudiante_t *, estudiante_t *)) {
+    if (arr == NULL || n <= 1) {
+        return;
+    }
 
-  if (arr == NULL || n <= 1) {
-    return;
-  }
-  // construccion del heap (heapify desde abajo):
-  for (int i = n / 2 - 1; i >= 0; i--) {
-    heapify(arr, n, i, cmp);
-  }
-  // uno por uno extraemos los elementos del heap:
-  for (int i = n - 1; i > 0; i--) {
-    // movemos el root actual al final:
-    estudiante_t *temp = arr[0];
-    arr[0] = arr[i];
-    arr[i] = temp;
+    // construccion del heap (heapify desde abajo):
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(arr, n, i, cmp);
+    }
 
-    heapify(arr, i, 0, cmp);
-  }
+    // uno por uno extraemos los elementos del heap:
+    for (int i = n - 1; i > 0; i--) {
+        // movemos el root actual al final:
+        estudiante_t *temp = arr[0];
+        arr[0] = arr[i];
+        arr[i] = temp;
+
+        heapify(arr, i, 0, cmp);
+    }
 }
 
 // Metodo para saber el largo de una lista
 int list_length(node_t *head) {
-  int count = 0;
-  node_t *temp = head->next;
+    int count = 0;
+    node_t *temp = head->next;
 
-  while (temp != NULL) {
-    count++;
-    temp = temp->next;
-  }
-  return count;
+    while (temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+
+    return count;
 }
 
 /**
@@ -295,38 +303,38 @@ int list_length(node_t *head) {
  *       antes de finalizar la función.
  */
 void sort_list(node_t *head, int (*cmp)(estudiante_t *, estudiante_t *)) {
+    if (head == NULL || head->next == NULL) {
+        return;
+    }
 
-  if (head == NULL || head->next == NULL) {
-    return;
-  }
+    int n = list_length(head);
+    estudiante_t **arr = malloc(n * sizeof(estudiante_t *));
 
-  int n = list_length(head);
+    if (arr == NULL) {
+        return;
+    }
 
-  estudiante_t **arr = malloc(n * sizeof(estudiante_t *));
-  if (arr == NULL) {
-    return;
-  }
+    node_t *temp = head->next;
+    int pp = 0;
 
-  node_t *temp = head->next;
-  int pp = 0;
+    while (temp != NULL) {
+        arr[pp] = temp->estudiante;
+        pp++;
+        temp = temp->next;
+    }
 
-  while (temp != NULL) {
-    arr[pp] = temp->estudiante;
-    pp++;
-    temp = temp->next;
-  }
-  // aplicamos nuestro algoritmo que marcha joya (heapsort > quicksort):
-  heap_sort(arr, n, cmp);
+    // aplicamos nuestro algoritmo que marcha joya (heapsort > quicksort):
+    heap_sort(arr, n, cmp);
 
-  temp = head->next;
-  pp = 0;
-  while (temp != NULL) {
-    temp->estudiante = arr[pp];
-    pp++;
-    temp = temp->next;
-  }
+    temp = head->next;
+    pp = 0;
+    while (temp != NULL) {
+        temp->estudiante = arr[pp];
+        pp++;
+        temp = temp->next;
+    }
 
-  free(arr);
+    free(arr);
 }
 
 void sort_by_ci(node_t *head) { sort_list(head, compare_by_ci); }
